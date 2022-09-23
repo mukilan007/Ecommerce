@@ -1,10 +1,14 @@
 package com.Login;
 
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
+import org.json.simple.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,13 +25,16 @@ public class SignIn extends HttpServlet {
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        String Payload = request.getParameter("payload");
-        LoginService.SignIn(Payload);
-//        response.setContentType("text/plain");
-//        PrintWriter printWriter = response.getWriter();
-//        printWriter.print("Hello "+ Payload + "!!");
-        response.sendError(404, "Not Found");
+        String payload = request.getParameter("payload");
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, String> map = null;
+        try {
+            map = mapper.readValue(payload, Map.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(map == null || !(LoginService.SignIn(map.get("email_id"), map.get("password"))))
+            response.sendError(401, "Unauthorized");
     }
 
 //    protected void doPost(HttpServletRequest request, HttpServletResponse response)

@@ -97,28 +97,39 @@ function signupform() {
        }
 }
 
-function getUser() {
-//    var formName = form.getAttribute('id');
-//    var queryString = $('#'+formName).serialize();
-//    alert(formName+"  "+queryString);
+function errorMessage() {
+        var error = document.getElementById("error")
+        error.textContent = "Please enter a correct valid"
+        error.style.color = "red"
+    }
 
+function myFunction() {
+        var x = document.getElementById("snackbar");
+//        document.getElementById("snackbar").value = x;
+        x.className = "show";
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
+
+function getUser() {
+    document.getElementById("error").value = "";
     var emailId = document.getElementById("emailId").value;
     var password = document.getElementById("password").value;
-    alert("Welcome to eco"+ emailId +" "+password);
     $.ajax({
     url: "login",
-    type: "GET",
-//    datatype: "json",
-    data: {"payload" : emailId},
+    method: "GET",
+//    type: "JSONObject",
+//    data: {"payload" : JSON.stringify({"email_id": emailId, "password": password})},
+    type: "json",
+    data: {"payload" : JSON.stringify({"email_id": emailId, "password": password})},
     cache: false,
     success: function(a){
-        console.log('error does not occured!!');
         window.location.href = "/Eco/Home.html";
-        alert("Welcome " + a);
-        },
+        myFunction();
+    },
     error: function(a, msg){
-        console.log('Error occured!!');
-        alert("error on " + a + msg);
+        errorMessage();
+        document.getElementById("emailId").value = "";
+        document.getElementById("password").value = "";
     }
     });
 }

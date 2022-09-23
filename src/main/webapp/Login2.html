@@ -1,20 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--  <meta charset="UTF-8">-->
   <title>Eco</title>
   <script src="js/javascript.js"></script>
   <link rel="stylesheet" href="css/style.css">
 <!--  <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js">-->
   <script type="text/javascript"  src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css"
+        media="screen and (max-device-width: 480px)"
+        href="shetland.css" />
 
 </head>
 <body>
 <!--autocomplete="off"-->
 <form onsubmit="event.preventDefault();getUser();">
-  <input type="email" name="emailId" id="emailId" placeholder="E-Mail Id"><br>
-  <input type="password" name="password" id="password" placeholder="Password"><br>
-  <input type="submit" value="Sign In">
+  <div class="login_container">
+    <div id="inner_container1">
+      <span id="error"></span><br>
+      <label><b>Email Id</b></label><br>
+      <input type="email" name="emailId" id="emailId" placeholder="E-Mail Id"><br>
+      <label><b>Password</b></label><br>
+      <input type="password" name="password" id="password" placeholder="Password"><br>
+    </div>
+    <div id="inner_container2">
+      <input type="submit" id="submit" value="Sign In">
+    </div>
+  </div>
 </form>
+<div id="snackbar">Some text some message..</div>
 </body>
 </html>
