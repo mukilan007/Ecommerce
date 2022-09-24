@@ -17,20 +17,28 @@ public class RESTOperation{
         connection = dbConnection.connectToDatabase(Constant.DataBaseName.Eco);
     }
 
-    public void createTable(String table_name){
+    public void createTable(String query){
         Statement statement = null;
         try {
-            String createUserTable = new Schema().createUserTable(table_name);
-//            String createProductTable = new Schema().createGobalProduct(table_name);
-//            String createCateoryTable = new Schema().createListOfCateory(table_name);
-
             statement = connection.createStatement();
-            statement.executeUpdate(createUserTable);
+            statement.executeUpdate(query);
             System.out.println("table created");
         }catch (Exception e){
             e.printStackTrace();
             System.out.println(e);
         }
+    }
+    public void createUserTable(String table_name){
+       createTable(new Schema(table_name).createUserTable());
+    }
+    public void createProductTable(String table_name){
+        createTable(new Schema(table_name).createGobalProduct());
+    }
+    public void createCateoryTable(String table_name){
+        createTable(new Schema(table_name).createListOfCateory());
+    }
+    public void createUserHistoryTable(String table_name){
+        createTable(new Schema(table_name).createUserHistory());
     }
 
     public void insert(String table_name, String[] payload){

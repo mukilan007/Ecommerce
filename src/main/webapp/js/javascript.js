@@ -122,8 +122,11 @@ function getUser() {
     type: "json",
     data: {"payload" : JSON.stringify({"email_id": emailId, "password": password})},
     cache: false,
-    success: function(a){
-        window.location.href = "/Eco/Home.html";
+    success: function(result){
+        if(result)
+            window.location.href = "/Eco/VendorHomePage.html";
+        else if(result)
+            window.location.href = "/Eco/Home.html";
         myFunction();
     },
     error: function(a, msg){
@@ -132,4 +135,18 @@ function getUser() {
         document.getElementById("password").value = "";
     }
     });
+}
+
+function vendorPage(event, view) {
+  var i;
+  var product = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < product.length; i++) {
+    product[i].style.display = "none";
+  }
+  var tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(view).style.display = "block";
+  event.currentTarget.className += " active";
 }

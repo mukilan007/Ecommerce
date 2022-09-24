@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--  <meta charset="UTF-8">-->
+    <title>Eco</title>
+    <script src="js/javascript.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/vendor.css">
+    <!--  <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js">-->
+    <script type="text/javascript"  src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css"
+          media="screen and (max-device-width: 480px)"
+          href="shetland.css" />
+</head>
+<body>
+        <div class="vendortab">
+            <button class="changeview" onclick="vendorPage(event, 'addproduct')">Add</button>
+            <button class="changeview" onclick="vendorPage(event, 'viewproduct')">View</button>
+            <button class="changeview" onclick="vendorPage(event, 'editproduct')">Edit</button>
+            <button class="changeview" onclick="vendorPage(event, 'deleteproduct')">Delete</button>
+        </div>
+
+        <div id="addproduct" class="tabcontent">
+            <form onsubmit="event.preventDefault();">
+                <div class="container">
+                    <div id="vendor_inner_container1">
+                        <span id="error"></span>
+                        <label><b>Category Name</b></label>
+                        <input type="text" name="categoryname" id="categoryname" placeholder="Category">
+
+                        <label><b>Type</b></label>
+                        <input type="text" name="type" id="type" placeholder="Type of Category">
+
+                        <label><b>Brand Name</b></label>
+                        <input type="text" name="brandname" id="brandname" placeholder="Product Brand">
+
+                        <label><b>Product Name</b></label>
+                        <input type="text" name="productname" id="productname" placeholder="Product Name">
+
+                        <label><b>Detail</b></label>
+                        <textarea rows="4" cols="20" name="detail" id="detail" placeholder="About it"></textarea>
+
+                        <label><b>Size</b></label>
+                        <input type="number" name="size" id="size" placeholder="Dimension">
+
+                        <label><b>Color</b></label>
+                        <input type="text" name="color" id="color" placeholder="Color">
+
+                        <label><b>Price</b></label>
+                        <input type="number" name="price" id="price" placeholder="Price">
+
+                        <label><b>Quantity</b></label>
+                        <input type="number" name="quantity" id="quantity" placeholder="Product Available">
+                    </div>
+                    <div id="vendor_inner_container2">
+                        <input type="submit" id="submit" value="Add">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div id="viewproduct" class="tabcontent">
+            <h3>View</h3>
+            <p>View is the capital of France.</p>
+        </div>
+
+        <div id="editproduct" class="tabcontent">
+            <h3>Edit</h3>
+            <p>edit is the capital of Japan.</p>
+        </div>
+
+        <div id="deleteproduct" class="tabcontent">
+            <h3>delete</h3>
+            <p>delete is the capital of Japan.</p>
+        </div>
+</script>
+</body>
+</html>
