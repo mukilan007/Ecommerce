@@ -6,11 +6,10 @@ public class Constant {
         public static final String Eco = "Eco";
     }
 
-    public static class DataBase_AdminTableName {}
-
     public static class DataBase_UserTableName {
         public static final String DBUserdata = "usersdata";
         public static final String DBProductdata = "globalproductsdata";
+        public static final String Cateorydata = "list_of_cateory";
     }
 
     public static class Usersdata {
@@ -48,7 +47,6 @@ public class Constant {
 
     public static class UserHistory {
         public static final String productid = "product_id";
-        public static final String categoryid = "category_id";
         public static final String quantity = "quantity";
         public static final String size = "size";
         public static final String prize = "prize";

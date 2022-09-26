@@ -1,17 +1,12 @@
 package test.testdb;
 
 import com.Constant;
-import com.db.DBConnection;
 import com.db.RESTOperation;
+import com.db.Query;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class testDBConnection {
 //    @Before
@@ -20,25 +15,75 @@ public class testDBConnection {
 //        Connection con = dbconnection.connectToDatabase(Constant.DataBaseName.Eco);
 //    }
 
+        public RESTOperation rest = new RESTOperation();
     public static void main(String[] args) {
+//        rest.createUserTable(Constant.DataBase_UserTableName.DBUserdata);    //table create
 
-        RESTOperation rest = new RESTOperation();
-
-//        rest.createTable(Constant.DataBase_UserTableName.DBUserdata);    //table create
-
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        Date date = new Date(System.currentTimeMillis());
-        String[] payload = {"mukilan", "password", String.valueOf(date), "mukilan@gmail.com", "xxx,yyy,zzz"
-                , "1234567890", "false", String.valueOf(timestamp), String.valueOf(timestamp), "false"};
-//        rest.insert(con, Constant.DataBase_UserTableName.DBUserdata, payload);      //insert record
+//        rest.createProductTable(Constant.DataBase_UserTableName.DBProductdata);
+//        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+//        Date date = new Date(System.currentTimeMillis());
+//        String[] payload = {"mukilan", "password", String.valueOf(date), "mukilan@gmail.com", "xxx,yyy,zzz"
+//                , "1234567890", "false", String.valueOf(timestamp), String.valueOf(timestamp), "false"};
+//        rest.insert(Constant.DataBase_UserTableName.DBProductdata, payload);      //insert record
 
 
 //        rest.view(Constant.DataBase_UserTableName.DBUserdata);      //view record
 
-        String email = "mukilan@gmail.com";
-        List<String> list = rest.find(Constant.DataBase_UserTableName.DBUserdata, email);      //view record
-        for(String i : list){
-            System.out.println(i);
+
+        //create table
+
+//        new testCreateTable().createCateory();
+
+        //User -> customer
+        new testUserManipulation().finddata();
+
+        //vendor
+//        new testVendorManipulation().addGlobalProductsData();
+//        new testVendorManipulation().addCateory();
+    }
+}
+class testCreateTable extends testDBConnection{
+
+    public void createCateory(){
+        rest.createCateoryTable(Query.CreateCateoryTable(Constant.DataBase_UserTableName.Cateorydata));
+    }
+}
+
+class testUserManipulation extends testDBConnection{
+    public void finddata(){
+        Map<String, String> payload = new HashMap<String, String>();
+        payload.put(Constant.Usersdata.email, "mukilan@gmail.com");
+        payload.put(Constant.Usersdata.password, "1234");
+
+        List<String> list = rest.find(Query.find(Constant.DataBase_UserTableName.DBUserdata,
+                Constant.Usersdata.email, payload.get(Constant.Usersdata.email)));      //view record
+        if (list.size() > 0 && (list.get(0).equals(payload.get(Constant.Usersdata.email))
+                && list.get(1).equals(payload.get(Constant.Usersdata.password)))) {
+            System.out.println("same");
+            for (String i : list)
+                System.out.println(i);
         }
+    }
+}
+class testVendorManipulation extends testDBConnection{
+    public void addGlobalProductsData(){
+        Map<String, String> payload = new HashMap<String, String>();
+        payload.put("vendorid", "1");
+        payload.put("categoryname", "categoryname");
+        payload.put("type", "type");
+        payload.put("brandname","brandname");
+        payload.put("productname","productname");
+        payload.put("detail", "detail");
+        payload.put("size", "10");
+        payload.put("color", "color");
+        payload.put("price", "1499");
+        payload.put("quantity", "90");
+        rest.insert(Query.queryAddProduct(Constant.DataBase_UserTableName.DBProductdata, payload));
+    }
+
+    public void addCateory(){
+        Map<String, String> payload = new HashMap<String, String>();
+        payload.put("categoryname", "categoryname");
+        rest.insert(Query.queryAddCateory(Constant.DataBase_UserTableName.Cateorydata, payload));
     }
 }

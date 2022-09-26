@@ -1,18 +1,21 @@
 package com.Login;
 
 import com.Constant;
+import com.db.Query;
 import com.db.RESTOperation;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 public class LoginService {
-    public static boolean SignIn(HttpServletRequest request, String email, String password){
+    public static boolean SignIn(HttpServletRequest request, Map<String, String> payload){
         RESTOperation rest = new RESTOperation();
-        List<String> list = rest.find(Constant.DataBase_UserTableName.DBUserdata, email);
-
-        if (!(list.size() > 0 && (list.get(0).equals(email) && list.get(1).equals(password))))
+        List<String> list = rest.find(Query.find(Constant.DataBase_UserTableName.DBUserdata,
+                Constant.Usersdata.email,payload.get(Constant.Usersdata.email)));
+        if (!(list.size() > 0 && (list.get(0).equals(payload.get(Constant.Usersdata.email))
+                && list.get(1).equals(payload.get(Constant.Usersdata.password)))))
             return false;
 
         HttpSession session=request.getSession();

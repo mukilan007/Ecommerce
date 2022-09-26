@@ -3,15 +3,15 @@ package com.db;
 import com.Constant;
 
 public class Schema {
-    private String table_name = "";
+    private String table_name = null;
 
     private Schema(){}
     public Schema(String table_name){
-        table_name = this.table_name;
+        this.table_name = table_name;
     }
 
     public String createUserTable(){
-        return "create table "+table_name+"("+
+        return "create table "+table_name+" ("+
                 Constant.Usersdata.userid+" serial PRIMARY KEY," +
                 Constant.Usersdata.name+" VARCHAR(50) UNIQUE NOT NULL," +
                 Constant.Usersdata.password+" VARCHAR(50) NOT NULL," +
@@ -27,14 +27,14 @@ public class Schema {
     }
 
     public String createListOfCateory() {
-        return "create table "+table_name+"(" +
+        return "create table "+table_name+" (" +
                 Constant.AllCateory.cateoryid+" serial PRIMARY KEY, " +
                 Constant.AllCateory.cateoryname+" VARCHAR(100) NOT NULL" +
                 ");";
     }
 
     public String createGobalProduct() {
-        return "create table "+table_name+"(" +
+        return "create table "+table_name+" (" +
                 Constant.DataBase_Gobal_Products.productid+" serial PRIMARY KEY," +
                 Constant.DataBase_Gobal_Products.vendorid+" BIGINT NOT NULL," +
                 Constant.DataBase_Gobal_Products.product_name+" VARCHAR(100) NOT NULL," +
@@ -50,7 +50,7 @@ public class Schema {
     }
 
     public String createUserHistory() {
-        return "create table"+table_name+"(" +
+        return "create table"+table_name+" (" +
                 Constant.UserHistory.productid+" BIGINT NOT NULL," +
 //                Constant.UserHistory.categoryid+" BIGINT NOT NULL," +
                 Constant.UserHistory.quantity+" BIGINT NOT NULL," +

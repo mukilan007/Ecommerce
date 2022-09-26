@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--  <meta charset="UTF-8">-->
     <title>Eco</title>
-    <script src="js/javascript.js"></script>
+    <script src="js/vendor.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/vendor.css">
     <!--  <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js">-->
@@ -22,7 +22,7 @@
         </div>
 
         <div id="addproduct" class="tabcontent">
-            <form onsubmit="event.preventDefault();">
+            <form onsubmit="event.preventDefault();vendorAdd();">
                 <div class="container">
                     <div id="vendor_inner_container1">
                         <span id="error"></span>
@@ -74,6 +74,5 @@
             <h3>delete</h3>
             <p>delete is the capital of Japan.</p>
         </div>
-</script>
 </body>
 </html>

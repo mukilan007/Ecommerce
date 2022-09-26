@@ -117,8 +117,6 @@ function getUser() {
     $.ajax({
     url: "login",
     method: "GET",
-//    type: "JSONObject",
-//    data: {"payload" : JSON.stringify({"email_id": emailId, "password": password})},
     type: "json",
     data: {"payload" : JSON.stringify({"email_id": emailId, "password": password})},
     cache: false,
@@ -137,16 +135,32 @@ function getUser() {
     });
 }
 
-function vendorPage(event, view) {
-  var i;
-  var product = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < product.length; i++) {
-    product[i].style.display = "none";
-  }
-  var tablinks = document.getElementsByClassName("tablinks");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-  }
-  document.getElementById(view).style.display = "block";
-  event.currentTarget.className += " active";
+function setUser(){
+    var name = document.getElementById("name").value;
+    var password = document.getElementById("password").value;
+    var cpassword = document.getElementById("cpassword").value;
+    var dob = document.getElementById("dob").value;
+    var address = document.getElementById("address").value;
+    var phone = document.getElementById("phone").value;
+    var admin = document.getElementById("admin").value;
+    var payload = {"name": name,
+                    "password": password,
+                    "cpassword": cpassword,
+                    "dob": dob,
+                    "address": address,
+                    "phone": phone,
+                    "admin": admin
+                    }
+    alert(payload);
+    $.ajax({
+        url: "signin",
+        method: "POST",
+        type: "json",
+        data: {"payload" : JSON.stringify(payload)},
+        cache: false,
+        success: function(){
+        },
+        error: function(){
+        }
+        });
 }
