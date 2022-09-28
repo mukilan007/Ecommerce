@@ -1,0 +1,19 @@
+.outercard{
+        padding: 3rem;
+}
+.innercard {
+        border: 2px solid black;
+        padding: 1.25rem;
+}
+.card{
+        display: flex;
+        flex-wrap: wrap;
+}
+
+.cardbtn{
+        padding-bottom: 10px;
+}
+
+.cardbtn input{
+        height: inherit;
+}

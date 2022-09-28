@@ -69,23 +69,17 @@ public class RESTOperation extends Query{
         }
     }
 
-    public List<String> find(String Query){
+    public ResultSet find(String Query){
         Statement statement = null;
         ResultSet resultdata = null;
-        List<String> result = new ArrayList<String>();
         try {
             statement = connection.createStatement();
             resultdata = statement.executeQuery(Query);
-            while(resultdata.next()){
-                result.add(resultdata.getString(Constant.Usersdata.email));
-                result.add(resultdata.getString(Constant.Usersdata.password));
-                result.add(resultdata.getString(Constant.Usersdata.isadmin));
-            }
         }catch (Exception e){
             e.printStackTrace();
             System.out.println(e);
         }
-        return result;
+        return resultdata;
     }
 
     public void Update(String table_name, String old_value, String new_value) {

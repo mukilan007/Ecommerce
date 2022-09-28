@@ -4,6 +4,8 @@ import com.Constant;
 import com.db.RESTOperation;
 import com.db.Query;
 
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,10 +57,24 @@ class testUserManipulation extends testDBConnection{
         payload.put(Constant.Usersdata.email, "mukilan@gmail.com");
         payload.put(Constant.Usersdata.password, "1234");
 
-        List<String> list = rest.find(Query.find(Constant.DataBase_UserTableName.DBUserdata,
+
+        List<String> list = new ArrayList<String>();
+        ResultSet resultdata = rest.find(Query.find(Constant.DataBase_UserTableName.DBUserdata,
                 Constant.Usersdata.email, payload.get(Constant.Usersdata.email)));      //view record
-        if (list.size() > 0 && (list.get(0).equals(payload.get(Constant.Usersdata.email))
-                && list.get(1).equals(payload.get(Constant.Usersdata.password)))) {
+        try {
+            while(resultdata.next()){
+                list.add(resultdata.getString(Constant.Usersdata.userid));
+                list.add(resultdata.getString(Constant.Usersdata.name));
+                list.add(resultdata.getString(Constant.Usersdata.email));
+                list.add(resultdata.getString(Constant.Usersdata.password));
+                list.add(resultdata.getString(Constant.Usersdata.isadmin));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e);
+        }
+        if (list.size() > 0 && (list.get(2).equals(payload.get(Constant.Usersdata.email))
+                && list.get(3).equals(payload.get(Constant.Usersdata.password)))) {
             System.out.println("same");
             for (String i : list)
                 System.out.println(i);
@@ -78,12 +94,11 @@ class testVendorManipulation extends testDBConnection{
         payload.put("color", "color");
         payload.put("price", "1499");
         payload.put("quantity", "90");
-        rest.insert(Query.queryAddProduct(Constant.DataBase_UserTableName.DBProductdata, payload));
+        rest.insert(Query.queryAddProduct(Constant.DataBase_UserTableName.DBProductdata,"1", payload));
     }
 
     public void addCateory(){
-        Map<String, String> payload = new HashMap<String, String>();
-        payload.put("categoryname", "categoryname");
+        String payload = "categoryname";
         rest.insert(Query.queryAddCateory(Constant.DataBase_UserTableName.Cateorydata, payload));
     }
 }

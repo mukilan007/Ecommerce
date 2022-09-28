@@ -4,14 +4,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--  <meta charset="UTF-8">-->
     <title>Eco</title>
-    <script src="js/vendor.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/vendor.css">
     <!--  <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js">-->
     <script type="text/javascript"  src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css"
-          media="screen and (max-device-width: 480px)"
-          href="shetland.css" />
+<!--    <link rel="stylesheet" type="text/css"-->
+<!--          media="screen and (max-device-width: 480px)"-->
+<!--          href="shetland.css" />-->
 </head>
 <body>
         <div class="vendortab">
@@ -22,7 +21,7 @@
         </div>
 
         <div id="addproduct" class="tabcontent">
-            <form onsubmit="event.preventDefault();vendorAdd();">
+            <form id="addform" onsubmit="event.preventDefault();vendorAdd();">
                 <div class="container">
                     <div id="vendor_inner_container1">
                         <span id="error"></span>
@@ -74,5 +73,6 @@
             <h3>delete</h3>
             <p>delete is the capital of Japan.</p>
         </div>
+        <script src="js/vendor.js"></script>
 </body>
 </html>

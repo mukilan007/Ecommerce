@@ -32,7 +32,7 @@ function vendorAdd() {
                     "price": price,
                     "quantity": quantity
                     }
-    alert(categoryname+" "+type+" "+brandname+" "+detail+" "+size+" "+color+" "+price+" "+quantity);
+    alert("Confirm to add product " + productname);
     $.ajax({
         url: "vendor/add",
         method: "POST",
@@ -46,3 +46,7 @@ function vendorAdd() {
         }
         });
 }
+const form = document.getElementById("addform");
+form.addEventListener('submit', function handleSubmit(event) {
+    form.reset();
+});

@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Welcome New User</title>
-  <script src="js/javascript.js"></script>
-  <link rel="stylesheet" href="css/style.css">
-  <script type="text/javascript"  src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript"  src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
-  <form onsubmit="event.preventDefault();setUser();">
+  <form id="signupform" onsubmit="event.preventDefault();setUser();">
     <div class="container">
       <div id="inner_container1">
         <span id="error"></span>
         <label><b>Name</b></label>
         <input type="text" name="name" id="name" placeholder="Username">
+
+        <label><b>Email Id</b></label>
+        <input type="email" name="emailId" id="emailId" placeholder="E-Mail Id">
 
         <label><b>Password</b></label>
         <input type="password" name="password" id="password" placeholder="Password">
@@ -31,7 +33,7 @@
         <input type="tel" name="phone" id="phone" placeholder="Mobile Number">
 
         <label><b>Signup as a Vendor</b></label>
-        <input type="text" name="admin" id="admin" value="false"><br>
+        <input type="checkbox" id="admin"/>
 
         <p>Have Account?<a href="/Eco/Login2.html">Back to Sign in...</a></p>
       </div>
@@ -40,5 +42,7 @@
       </div>
     </div>
   </form>
+  <div id="snackbar">Some text some message..</div>
+  <script src="js/javascript.js"></script>
 </body>
 </html>
