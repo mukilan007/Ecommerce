@@ -50,13 +50,13 @@ public class Schema {
     }
 
     public String createUserHistory() {
-        return "create table"+table_name+" (" +
+        return "create table "+table_name+" (" +
                 Constant.UserHistory.productid+" BIGINT NOT NULL," +
-//                Constant.UserHistory.categoryid+" BIGINT NOT NULL," +
+                Constant.UserHistory.vendorid+" BIGINT NOT NULL," +
                 Constant.UserHistory.quantity+" BIGINT NOT NULL," +
-                Constant.UserHistory.size+" SMALLINT NOT NULL," +
-                Constant.UserHistory.prize+" BIGINT NOT NULL," +   // TODO: 23-09-2022:  need to change data type to float controlled one.
-                Constant.UserHistory.stage+" VARCHAR(100) NOT NULL" +
+                Constant.UserHistory.stage+" VARCHAR(100) NOT NULL," +
+                Constant.UserHistory.createdAt+" TIMESTAMP default NULL," +
+                Constant.UserHistory.completedAt+" TIMESTAMP default NULL" +
                 ");";
     }
 }

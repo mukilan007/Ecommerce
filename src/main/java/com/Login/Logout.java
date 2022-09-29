@@ -1,25 +1,28 @@
-package com.customer;
-
-import com.Constant;
-import org.json.simple.JSONArray;
+package com.Login;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet("/product")
-public class HomePage extends HttpServlet{
+@WebServlet("/logout")
+public class Logout extends HttpServlet {
+    public Logout() {super();}
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        JSONArray cateorys = new CustomerService().getAllCateory(Constant.DataBase_UserTableName.Cateorydata,
-                new TableListOfCateory());
-
         PrintWriter out = response.getWriter();
-        out.print(cateorys);
+        response.setContentType("text/html");
+        HttpSession session = request.getSession(false);
+        String name = null;
+        if (session != null) {
+            name = (String) session.getAttribute("loggedUser");
+        }
+        session.invalidate();
+        out.print(name);
     }
 }

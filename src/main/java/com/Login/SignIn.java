@@ -17,12 +17,13 @@ import javax.servlet.http.HttpSession;
 public class SignIn extends HttpServlet {
 //    private static final long serialVersionUID = 1L;
     public SignIn() {super();}
+    protected LoginService loginService = new LoginService();
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Map<String, String> payload = new BaseClass().getPayload(request);
 
-        if(payload == null || !(LoginService.SignIn(request, payload)))
+        if(payload == null || !(loginService.SignIn(request, payload)))
             response.sendError(401, "Unauthorized");
         else {
             HttpSession session = request.getSession();
@@ -41,7 +42,7 @@ public class SignIn extends HttpServlet {
         Map<String, String> payload = new BaseClass().getPayload(request);
         String admin = request.getParameter("is_admin");
 
-        if(!LoginService.SignUp(request, payload, admin)) {
+        if(!loginService.SignUp(request, payload, admin)) {
             response.sendError(401, "Unauthorized");
         }
         else{

@@ -1,7 +1,25 @@
-function findcateory(value){
-console.log(value);
-    var cateory_name = document.getElementById("cardbtn").value;
-    var payload = {"cateory_name": value};
+function addcart(productid, vendorid){
+    var payload = {"product_id": productid.toString(),
+                "vendor_id": vendorid.toString()
+                }
+    $.ajax({
+        url: "cart",
+        method: "POST",
+        type: "json",
+        data: {"payload" : JSON.stringify(payload)},
+        cache: false,
+        success: function(){
+            alert("added to cart");
+        },
+        error: function(){
+            alert("not added to cart");
+        }
+        });
+}
+function findcateory(){
+//    var cateory_name = document.getElementById("cardbtn").value;
+    var cateory_name = sessionStorage.getItem("catname")
+    var payload = {"cateory_name": cateory_name};
        $.ajax({
             url: "view/product",
             method: "GET",
@@ -32,18 +50,26 @@ console.log(value);
                                 <p><b>color</b>: `+product[i].color+`</p>
                                 <p><b>size</b>: `+product[i].size+`</p>
                                 <p><b>quantity</b>: `+product[i].quantity+`</p>
-                                <button class ="btncart"><b>Add to Cart</b></button>
+                                <button class ="btncart"
+                                    onclick="addcart(`+product[i].product_id+','+product[i].vendor_id+`)"
+                                    value=`+product[i].product_id+`><b>Add to Cart</b></button>
                             </div>
                         </div>
                     </div>`;
                 }
-                $('#itemData').html(page);
+                $('#itemData1').html(page);
             },
             error: function(){
     //            errorMessage();
                     alert("error thrown");
             }
         });
+}
+function redirectthis(value){
+    sessionStorage.clear();
+    sessionStorage.setItem("catname", value);
+    window.location.href = "/Eco/ProductDetails.html";
+
 }
 
 function CustomerPage() {
@@ -61,7 +87,8 @@ function CustomerPage() {
                 <div class="outercard">
                     <div class="innercard">
                     <label><b>`+product[i].cateory_name+`</b></label><br>
-                        <button id="cardbtn"  onclick="findcateory('`+product[i].cateory_name+`')" value=`+product[i].cateory_name+`>Goto</button>
+                        <button id="cardbtn"  onclick="redirectthis('`+product[i].cateory_name+`')"
+                            value=`+product[i].cateory_name+`>Goto</button>
                     </div>
                 </div>`;
             }
@@ -69,4 +96,4 @@ function CustomerPage() {
       }
     });
 }
-//`+product[i].cateory_id+`','`+product[i].cateory_name+`
+//`+product[i].cateory_id+','+product[i].cateory_name+`

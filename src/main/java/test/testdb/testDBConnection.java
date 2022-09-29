@@ -5,20 +5,24 @@ import com.db.RESTOperation;
 import com.db.Query;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class testDBConnection {
+    public RESTOperation rest = null;
+    public testDBConnection(){
+        rest = RESTOperation.getInstance();
+    }
 //    @Before
 //    public void setUp() {
 //        DBConnection dbconnection = com.db.DBConnection.getDbObject();
 //        Connection con = dbconnection.connectToDatabase(Constant.DataBaseName.Eco);
 //    }
 
-        public RESTOperation rest = new RESTOperation();
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
 
 //        rest.createProductTable(Constant.DataBase_UserTableName.DBProductdata);
@@ -35,6 +39,7 @@ public class testDBConnection {
         //create table
 //        new testCreateTable().createUserTable();
 //        new testCreateTable().createCateory();
+        new testCreateTable().createUserHistory();
 
         //User -> customer
 //        new testUserManipulation().finddata();
@@ -45,13 +50,23 @@ public class testDBConnection {
     }
 }
 class testCreateTable extends testDBConnection{
-
     public void createUserTable(){
         rest.createUserTable(Constant.DataBase_UserTableName.DBUserdata);    //table create
     }
 
     public void createCateory(){
-        rest.createCateoryTable(Query.CreateCateoryTable(Constant.DataBase_UserTableName.Cateorydata));
+        rest.createTable(Query.CreateCateoryTable(Constant.DataBase_UserTableName.Cateorydata));
+    }
+
+    public void createUserHistory() throws SQLException {
+        String user_id = String.valueOf(2);
+        String tablename = "orderhistory"+user_id;
+        if(rest.checkTable(tablename)) {
+            rest.createTable(Query.CreateUserHistoryTable(tablename));
+        }
+        else{
+            System.out.println("already existed");
+        }
     }
 }
 

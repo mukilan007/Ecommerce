@@ -9,12 +9,17 @@ import java.sql.SQLException;
 import java.util.Map;
 
 public class Query {
-    protected static Connection connection = null;
-    protected static PreparedStatement preparedStatement = null;      //TODO: need to change into private
+    static  DBConnection dbConnection = DBConnection.getDbObject();
+    protected static Connection connection = dbConnection.connectToDatabase(Constant.DataBaseName.Eco);;
+    private static PreparedStatement preparedStatement = null;
 
 
-    public static String CreateCateoryTable(String table_name){
+    public static String CreateCateoryTable(String table_name) {
         return new Schema(table_name).createListOfCateory();
+    }
+
+    public static String CreateUserHistoryTable(String table_name) {
+        return new Schema(table_name).createUserHistory();
     }
 
 
@@ -39,7 +44,7 @@ public class Query {
         return String.valueOf(preparedStatement);
     }
 
-    public static String addUser(String table_name, Map<String, String> payload){          //TODO Map<String, String> payload
+    public static String queryAddUser(String table_name, Map<String, String> payload){
         try {
             String add = "insert into "+table_name+" (name,password,date_of_birth,e_mail,address,phone,is_admin," +
                     "created_at,last_check_in,is_deleted) values(?,?,?,?,?,?,?,?,?,?);";
@@ -89,6 +94,24 @@ public class Query {
             String add = "insert into "+table_name+" (cateory_name) values (?);";
             preparedStatement = connection.prepareStatement(add);
             preparedStatement.setString(1, payload);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return String.valueOf(preparedStatement);
+    }
+
+    public static String queryAddCart(String table_name, Map<String, String> payload) {
+        try {
+            String add = "insert into "+table_name+
+                    " (product_id, vendor_id, quantity, stage, created_at, completed_at) values (?,?,?,?,?,?);";
+            preparedStatement = connection.prepareStatement(add);
+            preparedStatement.setString(1, payload.get(Constant.UserHistory.productid));
+            preparedStatement.setString(2, payload.get(Constant.UserHistory.vendorid));
+            preparedStatement.setString(3, payload.get(Constant.UserHistory.quantity));
+            preparedStatement.setString(4, payload.get(Constant.UserHistory.stage));
+            preparedStatement.setString(5, payload.get(Constant.UserHistory.createdAt));
+            preparedStatement.setString(6, payload.get(Constant.UserHistory.completedAt));
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

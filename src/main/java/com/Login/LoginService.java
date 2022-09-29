@@ -13,8 +13,11 @@ import java.util.List;
 import java.util.Map;
 
 public class LoginService {
-    public static boolean SignIn(HttpServletRequest request, Map<String, String> payload){
-        RESTOperation rest = new RESTOperation();
+    private RESTOperation rest = null;
+    public LoginService(){
+        rest = RESTOperation.getInstance();
+    }
+    public boolean SignIn(HttpServletRequest request, Map<String, String> payload){
         List<String> list = new ArrayList<String>();
         ResultSet resultdata = rest.find(Query.find(Constant.DataBase_UserTableName.DBUserdata,
                 Constant.Usersdata.email,payload.get(Constant.Usersdata.email)));
@@ -42,15 +45,13 @@ public class LoginService {
         return true;
     }
 
-    public static boolean SignUp(HttpServletRequest request, Map<String, String> payload, String admin){
-        RESTOperation rest = new RESTOperation();
-
+    public boolean SignUp(HttpServletRequest request, Map<String, String> payload, String admin){
         Accountmanagement accountmanagement = new Accountmanagement();
         payload.put(Constant.Usersdata.createdat, String.valueOf(accountmanagement.getCreatedAt()));
-        payload.put(Constant.Usersdata.lastcheckin, String.valueOf(accountmanagement.getLastCheckIn()));
+        payload.put(Constant.Usersdata.lastcheckin, String.valueOf(accountmanagement.getTimeNow()));
         payload.put(Constant.Usersdata.isdeleted, String.valueOf(accountmanagement.getDeleted()));
         payload.put(Constant.Usersdata.isadmin, admin);
-        rest.insert(Query.addUser(Constant.DataBase_UserTableName.DBUserdata, payload));
+        rest.insert(Query.queryAddUser(Constant.DataBase_UserTableName.DBUserdata, payload));
 
         return SignIn(request, payload);
     }

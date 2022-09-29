@@ -17,9 +17,12 @@ import java.sql.ResultSet;
 import java.util.Map;
 
 public class VendorService {
+    private static RESTOperation rest = null;
+    public VendorService(){
+        rest = RESTOperation.getInstance();
+    }
 
     public static void getAllCateory(HttpServletRequest request, HttpServletResponse response){
-        RESTOperation rest = new RESTOperation();
         HttpSession session = request.getSession();
         ResultSet resultdata = rest.find(Query.find(Constant.DataBase_UserTableName.DBProductdata,
                 Constant.DataBase_Gobal_Products.vendorid,
@@ -45,15 +48,15 @@ public class VendorService {
         Validation validation = new Validation();
         validation.setCateoryname(payload.get("categoryname"));
         validation.checkCateory();
-        RESTOperation rest = new RESTOperation();
+
         HttpSession session = request.getSession();
         rest.insert(Query.queryAddProduct(Constant.DataBase_UserTableName.DBProductdata,
                 (String) session.getAttribute(Constant.Usersdata.userid),payload));
     }
 
-    public static void getProduct(HttpServletRequest request, @NotNull Map<String, String> payload) {
+    public static void getProduct(HttpServletRequest request,  Map<String, String> payload) {
         //TODO: change payload into string  and get data from session
-        RESTOperation rest = new RESTOperation();
+
         ResultSet resultdata = rest.find(Query.find(Constant.DataBase_UserTableName.DBProductdata,
                 Constant.DataBase_Gobal_Products.vendorid ,payload.get(Constant.DataBase_Gobal_Products.vendorid)));
         //TODO: either we need to use jsonArray intends of list

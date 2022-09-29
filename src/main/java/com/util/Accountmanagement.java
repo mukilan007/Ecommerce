@@ -7,7 +7,7 @@ public class Accountmanagement {
     public Timestamp getCreatedAt(){
         return timestamp;
     }
-    public Timestamp getLastCheckIn(){
+    public Timestamp getTimeNow(){
         return timestamp;
     }
     public boolean getDeleted(){

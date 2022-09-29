@@ -18,8 +18,8 @@ public class ViewProduct extends HttpServlet {
             throws ServletException, IOException {
         Map<String, String> payload = new BaseClass().getPayload(request);
 
-        JSONArray cateorys =CustomerService.findproduct(payload);
-        System.out.println(cateorys.toString());
+        JSONArray cateorys =new CustomerService().findproduct(payload);
+//        System.out.println(cateorys.toString());
 
         PrintWriter out = response.getWriter();
         out.print(cateorys);

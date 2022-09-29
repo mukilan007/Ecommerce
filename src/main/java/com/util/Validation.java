@@ -9,14 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Validation {
+    private static RESTOperation rest = null;
     private String cateoryname;
+    public Validation(){
+        rest = RESTOperation.getInstance();
+    }
 
     public void setCateoryname(String cateoryname) {
         this.cateoryname = cateoryname;
     }
 
     public void checkCateory() {
-        RESTOperation rest = new RESTOperation();
         List<String> list = new ArrayList<String>();
         ResultSet resultdata = rest.find(Query.find(Constant.DataBase_UserTableName.Cateorydata,
                 Constant.AllCateory.cateoryname, cateoryname));

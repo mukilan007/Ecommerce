@@ -1,15 +1,10 @@
 package com.db;
 
-import com.Constant;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.Arrays;
 
 public class DBConnection {
-    private static DBConnection dbObject = new DBConnection();
+    private static final DBConnection dbObject = new DBConnection();
     private DBConnection(){}
 
     public static DBConnection getDbObject(){

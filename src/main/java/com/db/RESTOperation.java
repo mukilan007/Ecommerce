@@ -7,13 +7,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class RESTOperation extends Query{
-    public RESTOperation(){             //TODO: need to change into singleton
-        DBConnection dbConnection = DBConnection.getDbObject();
-        connection = dbConnection.connectToDatabase(Constant.DataBaseName.Eco);
+    private static volatile RESTOperation rest = null;
+    private RESTOperation(){}
+    public static RESTOperation getInstance(){
+        if(rest == null){
+            synchronized(RESTOperation.class) {
+                if(rest == null) {
+                    rest = new RESTOperation();
+                }
+            }
+        }
+        return rest;
     }
 
     public void createTable(String query){
@@ -27,46 +32,42 @@ public class RESTOperation extends Query{
         }
         System.out.println("table created");
     }
+
+    public boolean checkTable(String tableName) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("select count(*) "
+                    + "from information_schema.tables "
+                    + "where table_name = ? "
+                    + "limit 1;");
+            preparedStatement.setString(1, tableName);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt(1) == 0;
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e);
+        }
+        return false;
+    }
     public void createUserTable(String table_name){
        createTable(new Schema(table_name).createUserTable());
     }
     public void createProductTable(String table_name){
         createTable(new Schema(table_name).createGobalProduct());
     }
-    public void createCateoryTable(String Query){
-        createTable(Query);
-    }
-    public void createUserHistoryTable(String table_name){
-        createTable(new Schema(table_name).createUserHistory());
-    }
 
     public void insert(String Query){
         Statement statement = null;
         try {
             statement = connection.createStatement();
-            statement.executeQuery(Query);
+//            statement.executeQuery(Query);
+            statement.executeUpdate(Query);
         }catch (Exception e){
             e.printStackTrace();
             System.out.println(e);
         }
         System.out.println("inserted success");
-    }
-
-    public void view(String table_name){
-        Statement statement = null;
-        ResultSet resultdata = null;
-        try {
-            String view  = String.format("select * from "+ table_name );
-            statement = connection.createStatement();
-            resultdata = statement.executeQuery(view);
-            while(resultdata.next()){
-                System.out.print(resultdata.getString(Constant.Usersdata.name) + " ");
-                System.out.println(resultdata.getString(Constant.Usersdata.email) + " ");
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            System.out.println(e);
-        }
     }
 
     public ResultSet find(String Query){
@@ -82,19 +83,19 @@ public class RESTOperation extends Query{
         return resultdata;
     }
 
-    public void Update(String table_name, String old_value, String new_value) {
-        Statement statement = null;
-        ResultSet resultdata = null;
-        try {
-            String update = "update "+ table_name +" set e_mail=? where e_mail=? ";
-            preparedStatement = connection.prepareStatement(update);
-            preparedStatement.setString(1, old_value);
-            preparedStatement.setString(2, new_value);
-            statement = connection.createStatement();
-            resultdata = statement.executeQuery(String.valueOf(preparedStatement));
-        }catch (Exception e){
-            e.printStackTrace();
-            System.out.println(e);
-        }
-    }
+//    public void Update(String table_name, String old_value, String new_value) {
+//        Statement statement = null;
+//        ResultSet resultdata = null;
+//        try {
+//            String update = "update "+ table_name +" set e_mail=? where e_mail=? ";
+//            preparedStatement = connection.prepareStatement(update);
+//            preparedStatement.setString(1, old_value);
+//            preparedStatement.setString(2, new_value);
+//            statement = connection.createStatement();
+//            resultdata = statement.executeQuery(String.valueOf(preparedStatement));
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            System.out.println(e);
+//        }
+//    }
 }

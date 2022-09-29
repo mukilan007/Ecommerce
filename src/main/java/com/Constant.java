@@ -47,10 +47,11 @@ public class Constant {
 
     public static class UserHistory {
         public static final String productid = "product_id";
+        public static final String vendorid = "vendor_id";
         public static final String quantity = "quantity";
-        public static final String size = "size";
-        public static final String prize = "prize";
         public static final String stage = "stage";
+        public static final String createdAt = "created_at";
+        public static final String completedAt = "completed_at";
 //        public static final String status = "status";
     }
 }
