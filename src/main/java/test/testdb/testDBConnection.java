@@ -19,7 +19,7 @@ public class testDBConnection {
 
         public RESTOperation rest = new RESTOperation();
     public static void main(String[] args) {
-//        rest.createUserTable(Constant.DataBase_UserTableName.DBUserdata);    //table create
+
 
 //        rest.createProductTable(Constant.DataBase_UserTableName.DBProductdata);
 //        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -33,11 +33,11 @@ public class testDBConnection {
 
 
         //create table
-
+//        new testCreateTable().createUserTable();
 //        new testCreateTable().createCateory();
 
         //User -> customer
-        new testUserManipulation().finddata();
+//        new testUserManipulation().finddata();
 
         //vendor
 //        new testVendorManipulation().addGlobalProductsData();
@@ -45,6 +45,10 @@ public class testDBConnection {
     }
 }
 class testCreateTable extends testDBConnection{
+
+    public void createUserTable(){
+        rest.createUserTable(Constant.DataBase_UserTableName.DBUserdata);    //table create
+    }
 
     public void createCateory(){
         rest.createCateoryTable(Query.CreateCateoryTable(Constant.DataBase_UserTableName.Cateorydata));

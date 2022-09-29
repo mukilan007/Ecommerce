@@ -42,13 +42,14 @@ public class LoginService {
         return true;
     }
 
-    public static boolean SignUp(HttpServletRequest request, Map<String, String> payload){
+    public static boolean SignUp(HttpServletRequest request, Map<String, String> payload, String admin){
         RESTOperation rest = new RESTOperation();
 
         Accountmanagement accountmanagement = new Accountmanagement();
         payload.put(Constant.Usersdata.createdat, String.valueOf(accountmanagement.getCreatedAt()));
         payload.put(Constant.Usersdata.lastcheckin, String.valueOf(accountmanagement.getLastCheckIn()));
         payload.put(Constant.Usersdata.isdeleted, String.valueOf(accountmanagement.getDeleted()));
+        payload.put(Constant.Usersdata.isadmin, admin);
         rest.insert(Query.addUser(Constant.DataBase_UserTableName.DBUserdata, payload));
 
         return SignIn(request, payload);

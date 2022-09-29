@@ -21,11 +21,11 @@ public class RESTOperation extends Query{
         try {
             statement = connection.createStatement();
             statement.executeUpdate(query);
-            System.out.println("table created");
         }catch (Exception e){
             e.printStackTrace();
             System.out.println(e);
         }
+        System.out.println("table created");
     }
     public void createUserTable(String table_name){
        createTable(new Schema(table_name).createUserTable());

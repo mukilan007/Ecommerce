@@ -110,6 +110,7 @@ function myFunction() {
         setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 }
 
+
 function getUser() {
     document.getElementById("error").value = "";
     var emailId = document.getElementById("emailId").value;
@@ -122,8 +123,7 @@ function getUser() {
     cache: false,
     success: function(usertype, name){
         if(usertype == "isadmin"){
-//            window.location.href = "/Eco/VendorHomePage.html";
-              window.location.href = "/Eco/Home.html";
+            window.location.href = "/Eco/VendorHomePage.html";
         }
         else if(usertype == "notadmin")
             window.location.href = "/Eco/Home.html";
@@ -132,8 +132,8 @@ function getUser() {
     },
     error: function(a, msg){            //TODO: use this field a and msg
         errorMessage();
-        document.getElementById("emailId").value = "";              //TODO: use total form delete
-        document.getElementById("password").value = "";
+//        document.getElementById("emailId").value = "";              //TODO: use total form delete
+//        document.getElementById("password").value = "";
     }
     });
 }
@@ -147,22 +147,21 @@ function setUser(){
     var address = document.getElementById("address").value;
     var phone = document.getElementById("phone").value;
     var admin = document.getElementById("admin").checked;
-    alert(admin);
     if(password == cpassword) {
         var payload = {"name": name,
                         "e_mail": emailId,
                         "password": password,
                         "date_of_birth": dob,
                         "address": address,
-                        "phone": phone,
-                        "is_admin": admin
+                        "phone": phone
                         }
         alert(name + ", Confirm to Create Account");
         $.ajax({
             url: "login",
             method: "POST",
             type: "json",
-            data: {"payload" : JSON.stringify(payload)},
+            data: {"payload" : JSON.stringify(payload),
+                    "is_admin": JSON.stringify(admin)},
             cache: false,
             success: function(usertype, name){
                 if(usertype == "isadmin"){
@@ -180,12 +179,7 @@ function setUser(){
     }
 }
 
-//const inform = document.getElementById("signinform");
-//inform.addEventListener('submit', function handleSubmit(event) {
-//    inform.reset();
-//});
-
-const regform = document.getElementById("signupform");
-regform.addEventListener('submit', function handleSubmit(event) {
-    regform.reset();
+const inform = document.getElementById("signform");
+inform.addEventListener('submit', function handleSubmit(event) {
+    inform.reset();
 });

@@ -1,3 +1,10 @@
+function autoVendorPage() {
+    $.ajax({
+            url : "vendorcookies",
+            method : 'GET',
+        });
+}
+
 function vendorPage(event, view) {
   var i;
   var product = document.getElementsByClassName("tabcontent");

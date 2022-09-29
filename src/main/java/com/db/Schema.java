@@ -13,7 +13,7 @@ public class Schema {
     public String createUserTable(){
         return "create table "+table_name+" ("+
                 Constant.Usersdata.userid+" serial PRIMARY KEY," +
-                Constant.Usersdata.name+" VARCHAR(50) UNIQUE NOT NULL," +
+                Constant.Usersdata.name+" VARCHAR(50) NOT NULL," +
                 Constant.Usersdata.password+" VARCHAR(50) NOT NULL," +
                 Constant.Usersdata.dateofbirth+" DATE NOT NULL," +
                 Constant.Usersdata.email+" VARCHAR(255) UNIQUE NOT NULL," +
@@ -28,8 +28,8 @@ public class Schema {
 
     public String createListOfCateory() {
         return "create table "+table_name+" (" +
-                Constant.AllCateory.cateoryid+" serial PRIMARY KEY, " +
-                Constant.AllCateory.cateoryname+" VARCHAR(100) NOT NULL" +
+                Constant.AllCateory.cateoryid+" serial NOT NULL, " +
+                Constant.AllCateory.cateoryname+" VARCHAR(100) NOT NULL PRIMARY KEY" +
                 ");";
     }
 

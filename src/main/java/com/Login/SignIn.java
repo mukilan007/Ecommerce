@@ -29,7 +29,6 @@ public class SignIn extends HttpServlet {
             String name = (String) session.getAttribute(Constant.Usersdata.name);
             String type = (String) session.getAttribute(Constant.Usersdata.isadmin);
             PrintWriter out = response.getWriter();
-            System.out.println(name);       //TODO: Remove name
             if(type.equals("t"))
                 out.printf("isadmin", name);        //TODO: need to need two parameter to js
             else
@@ -40,8 +39,9 @@ public class SignIn extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Map<String, String> payload = new BaseClass().getPayload(request);
+        String admin = request.getParameter("is_admin");
 
-        if(!LoginService.SignUp(request, payload)) {
+        if(!LoginService.SignUp(request, payload, admin)) {
             response.sendError(401, "Unauthorized");
         }
         else{
@@ -54,6 +54,5 @@ public class SignIn extends HttpServlet {
             else
                 out.printf("notadmin", name);
         }
-        doGet(request, response);
     }
 }
