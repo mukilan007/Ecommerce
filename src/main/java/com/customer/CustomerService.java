@@ -4,6 +4,9 @@ import com.Constant;
 import com.db.Query;
 import com.db.RESTOperation;
 import com.Iterator;
+import com.notification.Emailnotification;
+import com.notification.Notification;
+import com.notification.SMSnotification;
 import com.util.Accountmanagement;
 
 import org.json.simple.JSONArray;
@@ -90,12 +93,7 @@ public class CustomerService{
 
     }
 
-    public void addcart(HttpServletRequest request, Map<String, String> payload) {
-        HttpSession session = request.getSession();
-        String userid = String.valueOf(session.getAttribute(Constant.Usersdata.userid));
-        String tablename = "orderhistory"+userid;
-//        System.out.println("tablename " + tablename);
-
+    public void addcart(String tablename, Map<String, String> payload) {
         if(rest.checkTable(tablename)) {
             rest.createTable(Query.CreateUserHistoryTable(tablename));
         }
@@ -108,8 +106,8 @@ public class CustomerService{
         rest.insert(Query.queryAddCart(tablename, payload));
     }
 
-    public JSONArray findcard(String table_name1, String table_name2) throws SQLException {
-        ResultSet resultdata = rest.find(Query.findcart(table_name1, table_name2));
+    public JSONArray findcard(String table_name1, String table_name2, String stage) throws SQLException {
+        ResultSet resultdata = rest.find(Query.findcart(table_name1, table_name2, stage));
         int size = 0;
         if (resultdata.last()) {
             size = resultdata.getRow();
@@ -151,8 +149,25 @@ public class CustomerService{
         productjson.add(totalamount);
         return productjson;
     }
+    public void sendNotifcation(ResultSet resultdata){
+        Emailnotification emailnotification = new Emailnotification();
+        SMSnotification smsnotification = new SMSnotification();
 
+        Notification notification = new Notification(emailnotification, smsnotification);
+        try {
+            while(resultdata.next()){
+                notification.add(resultdata.getString(Constant.UserHistory.productid),
+                        resultdata.getString(Constant.UserHistory.vendorid));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e);
+        }
+        notification.dataChange();
+    }
     public void updatecart(String tablename, String stage) {
         ResultSet resultdata = rest.Update(Query.update(tablename,stage));
+
+//        sendNotifcation(resultdata);
     }
 }

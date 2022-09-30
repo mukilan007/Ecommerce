@@ -45,7 +45,7 @@ public class Query {
         return String.valueOf(preparedStatement);
     }
 
-    public static String findcart(String table_name1, String table_name2) {
+    public static String findcart(String table_name1, String table_name2, String condition) {
         String find  = "SELECT "+
                 table_name1 +"."+ Constant.DataBase_Gobal_Products.product_name+ "," +
                 table_name1 +"."+ Constant.DataBase_Gobal_Products.brand_name+ "," +
@@ -56,8 +56,7 @@ public class Query {
                 " FROM "+ table_name1 +" INNER JOIN "+ table_name2 +
                 " ON "+ table_name1 +"."+ Constant.DataBase_Gobal_Products.productid +"=" +
                 table_name2 +"."+ Constant.UserHistory.productid +
-                " WHERE "+Constant.UserHistory.stage+" = 'cart' ;";
-        System.out.println(find);
+                " WHERE "+Constant.UserHistory.stage+" = '"+ condition +"';";
         return find;
     }
 

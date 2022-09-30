@@ -19,16 +19,20 @@ import java.util.Map;
 @WebServlet("/cart")
 public class Cart extends HttpServlet {
 
+    private String getTableName(HttpServletRequest req){
+        HttpSession session = req.getSession();
+        String userid = String.valueOf(session.getAttribute(Constant.Usersdata.userid));
+        return "orderhistory" + userid;
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        String userid = String.valueOf(session.getAttribute(Constant.Usersdata.userid));
-        String tablename = "orderhistory"+userid;
-
+        String tablename = getTableName(request);
+        String stage = Constant.Stage.Cart;
         JSONArray jsoncart = null;
         try {
-            jsoncart = new CustomerService().findcard(Constant.DataBase_UserTableName.DBProductdata, tablename);
+            jsoncart = new CustomerService().findcard(Constant.DataBase_UserTableName.DBProductdata, tablename, stage);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -40,7 +44,7 @@ public class Cart extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Map<String, String> payload = new BaseClass().getPayload(request);
-
-        new CustomerService().addcart(request,payload);
+        String tablename = getTableName(request);
+        new CustomerService().addcart(tablename,payload);
     }
 }

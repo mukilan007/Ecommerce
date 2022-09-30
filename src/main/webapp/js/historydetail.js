@@ -1,5 +1,5 @@
 
-function generateinvoice() {
+function generateorder() {
     alert(" Pay a Amount ");
      $.ajax({
         url: "cart/order",
@@ -7,14 +7,14 @@ function generateinvoice() {
         cache: false,
         success: function(usertype, name){
             alert("ordered placed")
-            location.reload();
+            refresh();
+            window.location.href
         },
         error: function(){
             alert("error occurs")
         }
         });
 }
-
 
 function insertintotable(data) {
     console.log(data);
@@ -45,40 +45,30 @@ function insertintotable(data) {
 
 function getcart() {
     $.ajax({
-            url: "cart",
-            method: "GET",
-            headers : { Accept : "application/json; charset=utf-8", "Content-Type" : "application/json; charset=utf-8"},
-            success : function(result) {
-                var product = $.parseJSON(result);
-                insertintotable(product);
-             },
-            error: function(){
-                alert("error occurs");
-            }
-            });
+        url: "cart",
+        method: "GET",
+        headers : { Accept : "application/json; charset=utf-8", "Content-Type" : "application/json; charset=utf-8"},
+        success : function(result) {
+            var product = $.parseJSON(result);
+            insertintotable(product);
+         },
+        error: function(){
+            alert("error occurs");
+        }
+        });
 }
 
-//var page="";
-//console.log(result);
-//var product = $.parseJSON(result);
-//for (let i = 0; i < product.length; i++) {
-//    page+=`
-//        <div class="imgcard">
-//            <div class="innercard">
-//                    <img src="image/image_photo.png" alt="photo" style="width:150px;height:150px;">
-//                <div class="content">
-//                    <h4><b>`+product[i].product_name+`</b></h4><br>
-//                    <p><b>brand_name</b>: `+product[i].brand_name+`</p>
-//                    <p><b>price</b>: `+product[i].price+`</p>
-//                    <p><b>Detail</b>: `+product[i].detail+`</p>
-//                    <p><b>color</b>: `+product[i].color+`</p>
-//                    <p><b>size</b>: `+product[i].size+`</p>
-//                    <p><b>quantity</b>: `+product[i].quantity+`</p>
-//                    <button class ="btncart"
-//                        onclick="addcart(`+product[i].product_id+','+product[i].vendor_id+`)"
-//                        value=`+product[i].product_id+`><b>Add to Cart</b></button>
-//                </div>
-//            </div>
-//        </div>`;
-//}
-//$('#itemData2').html(page);
+function getorder() {
+    $.ajax({
+        url: "cart/order",
+        method: "GET",
+        headers : { Accept : "application/json; charset=utf-8", "Content-Type" : "application/json; charset=utf-8"},
+        success : function(result) {
+            var product = $.parseJSON(result);
+            insertintotable(product);
+         },
+        error: function(){
+            alert("error occurs");
+        }
+        });
+}

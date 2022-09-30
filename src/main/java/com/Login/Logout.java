@@ -22,6 +22,7 @@ public class Logout extends HttpServlet {
         if (session != null) {
             name = (String) session.getAttribute("loggedUser");
         }
+//        assert session != null;
         session.invalidate();
         out.print(name);
     }

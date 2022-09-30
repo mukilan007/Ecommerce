@@ -104,7 +104,8 @@ class testUserManipulation extends testDBConnection{
 
     public void findCartData() {
         String tablename = "orderhistory2";
-        ResultSet resultdata = rest.find(Query.findcart(Constant.DataBase_UserTableName.DBProductdata, tablename));
+        String stage = Constant.Stage.Cart;
+        ResultSet resultdata = rest.find(Query.findcart(Constant.DataBase_UserTableName.DBProductdata, tablename, stage));
         JSONArray cateoryslist = new JSONArray();
         try {
             while(resultdata.next()){
