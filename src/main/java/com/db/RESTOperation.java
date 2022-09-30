@@ -9,7 +9,9 @@ import java.sql.Statement;
 
 public class RESTOperation extends Query{
     private static volatile RESTOperation rest = null;
-    private RESTOperation(){}
+    private RESTOperation(){
+        super();
+    }
     public static RESTOperation getInstance(){
         if(rest == null){
             synchronized(RESTOperation.class) {
@@ -74,7 +76,8 @@ public class RESTOperation extends Query{
         Statement statement = null;
         ResultSet resultdata = null;
         try {
-            statement = connection.createStatement();
+            statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             resultdata = statement.executeQuery(Query);
         }catch (Exception e){
             e.printStackTrace();
@@ -83,19 +86,16 @@ public class RESTOperation extends Query{
         return resultdata;
     }
 
-//    public void Update(String table_name, String old_value, String new_value) {
-//        Statement statement = null;
-//        ResultSet resultdata = null;
-//        try {
-//            String update = "update "+ table_name +" set e_mail=? where e_mail=? ";
-//            preparedStatement = connection.prepareStatement(update);
-//            preparedStatement.setString(1, old_value);
-//            preparedStatement.setString(2, new_value);
-//            statement = connection.createStatement();
-//            resultdata = statement.executeQuery(String.valueOf(preparedStatement));
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            System.out.println(e);
-//        }
-//    }
+    public ResultSet Update(String query) {
+        Statement statement = null;
+        ResultSet resultdata = null;
+        try {
+            statement = connection.createStatement();
+            resultdata = statement.executeQuery(query);
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e);
+        }
+        return resultdata;
+    }
 }

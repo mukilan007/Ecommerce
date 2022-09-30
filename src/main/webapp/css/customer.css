@@ -65,3 +65,7 @@
   background-color: #04AA6D;
   color: white;
 }
+
+.dis_amount{
+    float: left;
+}

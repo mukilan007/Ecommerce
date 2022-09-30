@@ -1,7 +1,6 @@
 package com.db;
 
 import com.Constant;
-import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,15 +8,17 @@ import java.sql.SQLException;
 import java.util.Map;
 
 public class Query {
-    static  DBConnection dbConnection = DBConnection.getDbObject();
-    protected static Connection connection = dbConnection.connectToDatabase(Constant.DataBaseName.Eco);;
+    protected static Connection connection = null;
+    public Query() {
+        DBConnection dbConnection = new ProxyDBConnection();
+        dbConnection.connectToDatabase();
+        connection = dbConnection.getcon();
+    }
+
     private static PreparedStatement preparedStatement = null;
-
-
     public static String CreateCateoryTable(String table_name) {
         return new Schema(table_name).createListOfCateory();
     }
-
     public static String CreateUserHistoryTable(String table_name) {
         return new Schema(table_name).createUserHistory();
     }
@@ -42,6 +43,22 @@ public class Query {
             throw new RuntimeException(e);
         }
         return String.valueOf(preparedStatement);
+    }
+
+    public static String findcart(String table_name1, String table_name2) {
+        String find  = "SELECT "+
+                table_name1 +"."+ Constant.DataBase_Gobal_Products.product_name+ "," +
+                table_name1 +"."+ Constant.DataBase_Gobal_Products.brand_name+ "," +
+                table_name1 +"."+ Constant.DataBase_Gobal_Products.color+ "," +
+                table_name1 +"."+ Constant.DataBase_Gobal_Products.size+ "," +
+                table_name2 +"."+ Constant.UserHistory.quantity+ "," +
+                table_name1 +"."+ Constant.DataBase_Gobal_Products.price+
+                " FROM "+ table_name1 +" INNER JOIN "+ table_name2 +
+                " ON "+ table_name1 +"."+ Constant.DataBase_Gobal_Products.productid +"=" +
+                table_name2 +"."+ Constant.UserHistory.productid +
+                " WHERE "+Constant.UserHistory.stage+" = 'cart' ;";
+        System.out.println(find);
+        return find;
     }
 
     public static String queryAddUser(String table_name, Map<String, String> payload){
@@ -116,6 +133,20 @@ public class Query {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+        return String.valueOf(preparedStatement);
+    }
+
+    public static String update(String table_name, String stage) {
+        try {
+            String update = "update "+ table_name +" set " +
+                    Constant.UserHistory.stage+" = '" +stage+ "' WHERE " +
+                    Constant.UserHistory.stage+" = 'cart'";
+            preparedStatement = connection.prepareStatement(update);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        System.out.println(String.valueOf(preparedStatement));
         return String.valueOf(preparedStatement);
     }
 }

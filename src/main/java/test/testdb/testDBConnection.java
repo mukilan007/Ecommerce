@@ -3,6 +3,8 @@ package test.testdb;
 import com.Constant;
 import com.db.RESTOperation;
 import com.db.Query;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,10 +41,11 @@ public class testDBConnection {
         //create table
 //        new testCreateTable().createUserTable();
 //        new testCreateTable().createCateory();
-        new testCreateTable().createUserHistory();
+//        new testCreateTable().createUserHistory();
 
         //User -> customer
 //        new testUserManipulation().finddata();
+        new testUserManipulation().findCartData();
 
         //vendor
 //        new testVendorManipulation().addGlobalProductsData();
@@ -76,7 +79,6 @@ class testUserManipulation extends testDBConnection{
         payload.put(Constant.Usersdata.email, "mukilan@gmail.com");
         payload.put(Constant.Usersdata.password, "1234");
 
-
         List<String> list = new ArrayList<String>();
         ResultSet resultdata = rest.find(Query.find(Constant.DataBase_UserTableName.DBUserdata,
                 Constant.Usersdata.email, payload.get(Constant.Usersdata.email)));      //view record
@@ -97,6 +99,37 @@ class testUserManipulation extends testDBConnection{
             System.out.println("same");
             for (String i : list)
                 System.out.println(i);
+        }
+    }
+
+    public void findCartData() {
+        String tablename = "orderhistory2";
+        ResultSet resultdata = rest.find(Query.findcart(Constant.DataBase_UserTableName.DBProductdata, tablename));
+        JSONArray cateoryslist = new JSONArray();
+        try {
+            while(resultdata.next()){
+                JSONObject cateorydetails =new JSONObject();
+                cateorydetails.put(Constant.DataBase_Gobal_Products.product_name,
+                        resultdata.getString(Constant.DataBase_Gobal_Products.product_name));
+                cateorydetails.put(Constant.DataBase_Gobal_Products.brand_name,
+                        resultdata.getString(Constant.DataBase_Gobal_Products.brand_name));
+                cateorydetails.put(Constant.DataBase_Gobal_Products.color,
+                        resultdata.getString(Constant.DataBase_Gobal_Products.color));
+                cateorydetails.put(Constant.DataBase_Gobal_Products.size,
+                        resultdata.getString(Constant.DataBase_Gobal_Products.size));
+                cateorydetails.put(Constant.DataBase_Gobal_Products.quantity,
+                        resultdata.getString(Constant.DataBase_Gobal_Products.quantity));
+                cateorydetails.put(Constant.DataBase_Gobal_Products.price,
+                        resultdata.getString(Constant.DataBase_Gobal_Products.price));
+                cateoryslist.add(cateorydetails);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e);
+        }
+        System.out.println(cateoryslist.toString());
+        for(Object i :cateoryslist){
+            System.out.println(i);
         }
     }
 }

@@ -80,3 +80,15 @@ input {
   from {bottom: 30px; opacity: 1;}
   to {bottom: 0; opacity: 0;}
 }
+
+table {
+        border-collapse: collapse;
+        width: 100%;
+        color: black;
+        text-align: left;
+}
+th {
+        background-color: green;
+        color: white;
+        opacity: 0.6;
+}

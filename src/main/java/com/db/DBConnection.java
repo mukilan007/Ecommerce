@@ -1,31 +1,8 @@
 package com.db;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 
-public class DBConnection {
-    private static final DBConnection dbObject = new DBConnection();
-    private DBConnection(){}
-
-    public static DBConnection getDbObject(){
-        return dbObject;
-    }
-
-    public Connection connectToDatabase(String dbName) {
-       Connection con= null;
-       try{
-           Class.forName("org.postgresql.Driver");
-           con = DriverManager.getConnection("jdbc:postgresql://localhost:5433/" + dbName,"postgres","admin");
-//           if(con != null){
-//               System.out.println("Connected to DB");
-//           }else {
-//               System.out.println("Connection Failed");
-//           }
-       }
-       catch (Exception e){
-           e.getStackTrace();
-       }
-       return con;
-    }
+interface DBConnection {
+    Connection getcon();
+    void connectToDatabase();
 }
-

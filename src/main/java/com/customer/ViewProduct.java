@@ -17,11 +17,12 @@ public class ViewProduct extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Map<String, String> payload = new BaseClass().getPayload(request);
+        PrintWriter out = response.getWriter();
 
-        JSONArray cateorys =new CustomerService().findproduct(payload);
+        out.print(new CustomerService().findproduct(payload));
 //        System.out.println(cateorys.toString());
 
-        PrintWriter out = response.getWriter();
-        out.print(cateorys);
+
+//        out.print(cateorys);
     }
 }
