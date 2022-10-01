@@ -98,16 +98,16 @@
 //}
 
 function errorMessage() {
-        var error = document.getElementById("error")
-        error.textContent = "Please enter a correct valid"
-        error.style.color = "red"
-    }
+    var error = document.getElementById("error")
+    error.textContent = "Please enter a correct valid"
+    error.style.color = "red"
+}
 
 function myFunction() {
-        var x = document.getElementById("snackbar");
+    var x = document.getElementById("snackbar");
 //        document.getElementById("snackbar").value = x;
-        x.className = "show";
-        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+    x.className = "show";
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 }
 
 
@@ -116,25 +116,23 @@ function getUser() {
     var emailId = document.getElementById("emailId").value;
     var password = document.getElementById("password").value;
     $.ajax({
-    url: "login",
-    method: "GET",
-    type: "json",
-    data: {"payload" : JSON.stringify({"e_mail": emailId, "password": password})},
-    cache: false,
-    success: function(usertype, name){
-        if(usertype == "isadmin"){
-            window.location.href = "/Eco/VendorHomePage.html";
+        url: "login",
+        method: "GET",
+        type: "json",
+        data: {"payload" : JSON.stringify({"e_mail": emailId, "password": password})},
+        cache: false,
+        success: function(usertype, name){
+            if(usertype == "isadmin"){
+                window.location.href = "/Eco/VendorHomePage.html";
+            }
+            else if(usertype == "notadmin")
+                window.location.href = "/Eco/Home.html";
+            alert("Welcome " +  name);
+            myFunction();
+        },
+        error: function(a, msg){            //TODO: use this field a and msg
+            errorMessage();
         }
-        else if(usertype == "notadmin")
-            window.location.href = "/Eco/Home.html";
-        alert("Welcome " +  name);
-        myFunction();
-    },
-    error: function(a, msg){            //TODO: use this field a and msg
-        errorMessage();
-//        document.getElementById("emailId").value = "";              //TODO: use total form delete
-//        document.getElementById("password").value = "";
-    }
     });
 }
 
@@ -175,7 +173,7 @@ function setUser(){
             error: function(){
                 alert("Account not created, Try again.")
             }
-            });
+        });
     }
 }
 

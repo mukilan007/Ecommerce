@@ -1,10 +1,8 @@
 package com.db;
 
-import com.Constant;
-
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class RESTOperation extends Query{
@@ -59,11 +57,10 @@ public class RESTOperation extends Query{
         createTable(new Schema(table_name).createGobalProduct());
     }
 
-    public void insert(String Query){
+    public void executeUpdate(String Query) throws SQLException {
         Statement statement = null;
         try {
             statement = connection.createStatement();
-//            statement.executeQuery(Query);
             statement.executeUpdate(Query);
         }catch (Exception e){
             e.printStackTrace();
@@ -72,26 +69,13 @@ public class RESTOperation extends Query{
         System.out.println("inserted success");
     }
 
-    public ResultSet find(String Query){
+    public ResultSet executeQuery(String Query){
         Statement statement = null;
         ResultSet resultdata = null;
         try {
             statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_READ_ONLY);
             resultdata = statement.executeQuery(Query);
-        }catch (Exception e){
-            e.printStackTrace();
-            System.out.println(e);
-        }
-        return resultdata;
-    }
-
-    public ResultSet Update(String query) {
-        Statement statement = null;
-        ResultSet resultdata = null;
-        try {
-            statement = connection.createStatement();
-            resultdata = statement.executeQuery(query);
         }catch (Exception e){
             e.printStackTrace();
             System.out.println(e);

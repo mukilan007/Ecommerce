@@ -5,6 +5,7 @@ import com.db.Query;
 import com.db.RESTOperation;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,9 +20,9 @@ public class Validation {
         this.cateoryname = cateoryname;
     }
 
-    public void checkCateory() {
+    public void checkCateory() throws SQLException {
         List<String> list = new ArrayList<String>();
-        ResultSet resultdata = rest.find(Query.find(Constant.DataBase_UserTableName.Cateorydata,
+        ResultSet resultdata = rest.executeQuery(Query.find(Constant.DataBase_UserTableName.Cateorydata,
                 Constant.AllCateory.cateoryname, cateoryname));
         try {
             while(resultdata.next()){
@@ -32,7 +33,7 @@ public class Validation {
             System.out.println(e);
         }
         if (list.size() == 0)
-            rest.insert(Query.queryAddCateory(Constant.DataBase_UserTableName.Cateorydata, cateoryname));
+            rest.executeUpdate(Query.queryAddCateory(Constant.DataBase_UserTableName.Cateorydata, cateoryname));
     }
 
 }

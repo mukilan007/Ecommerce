@@ -1,25 +1,47 @@
 package com.vendor;
 
-import com.base.BaseClass;
+
+
+import com.Constant;
+import org.json.simple.JSONArray;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Map;
+import java.io.PrintWriter;
+import java.sql.SQLException;
 
-@WebServlet("/vendor/view")             //TODO: thick about inner servlet
+@WebServlet("/vendor/view")
 public class VendorView extends HttpServlet {
     public VendorView(){
         super();
     }
+    private String getTableName(HttpServletRequest req){
+        HttpSession session = req.getSession();
+        String userid = String.valueOf(session.getAttribute(Constant.Usersdata.userid));
+        return "orderhistory" + userid;
+    }
+    private String getUserId(HttpServletRequest req){
+        HttpSession session = req.getSession();
+        return  (String) session.getAttribute(Constant.Usersdata.userid);
+    }
+    protected VendorService vendorService = new VendorService();
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Map<String, String> payload = new BaseClass().getPayload(request);
-
-        VendorService.getProduct(request,payload);
+        JSONArray cateorys = new JSONArray();
+        try {
+            cateorys = vendorService.getCateory(getUserId(request));
+        } catch (SQLException e) {
+            response.sendError(401, "Unauthorized");
+            throw new RuntimeException(e);
+        }
+        System.out.println(cateorys.toString());
+        PrintWriter out = response.getWriter();
+        out.print(cateorys);
     }
 }

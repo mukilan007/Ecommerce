@@ -8,6 +8,7 @@ import com.util.Accountmanagement;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,7 @@ public class LoginService {
     }
     public boolean SignIn(HttpServletRequest request, Map<String, String> payload){
         List<String> list = new ArrayList<String>();
-        ResultSet resultdata = rest.find(Query.find(Constant.DataBase_UserTableName.DBUserdata,
+        ResultSet resultdata = rest.executeQuery(Query.find(Constant.DataBase_UserTableName.DBUserdata,
                 Constant.Usersdata.email,payload.get(Constant.Usersdata.email)));
         try {
             while(resultdata.next()){
@@ -45,14 +46,22 @@ public class LoginService {
         return true;
     }
 
-    public boolean SignUp(HttpServletRequest request, Map<String, String> payload, String admin){
+    public boolean SignUp(HttpServletRequest request, Map<String, String> payload, String admin) throws SQLException {
         Accountmanagement accountmanagement = new Accountmanagement();
         payload.put(Constant.Usersdata.createdat, String.valueOf(accountmanagement.getCreatedAt()));
         payload.put(Constant.Usersdata.lastcheckin, String.valueOf(accountmanagement.getTimeNow()));
         payload.put(Constant.Usersdata.isdeleted, String.valueOf(accountmanagement.getDeleted()));
         payload.put(Constant.Usersdata.isadmin, admin);
-        rest.insert(Query.queryAddUser(Constant.DataBase_UserTableName.DBUserdata, payload));
+        rest.executeUpdate(Query.queryAddUser(Constant.DataBase_UserTableName.DBUserdata, payload));
 
-        return SignIn(request, payload);
+        if(SignIn(request, payload)){
+            HttpSession session = request.getSession();
+            String tablename = "orderhistory" + String.valueOf(session.getAttribute(Constant.Usersdata.userid));
+            if(rest.checkTable(tablename)) {
+                rest.createTable(Query.CreateUserHistoryTable(tablename));
+            }
+            return true;
+        }
+        return false;
     }
 }

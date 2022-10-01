@@ -1,11 +1,17 @@
 package com;
 
 public class Constant {
-    public static class Stage {
-        public static final String Cart = "cart";
-        public static final String Ordered = "ordered";
-        public static final String Delivered = "delivered";
-        public static final String Cancel = "cancel";
+    public static class VendorStage {               //TODO: change packed, order, shipped to order constant class.
+        public static final String packed = "packed";
+        public static final String ordered = "ordered";
+        public static final String shipped = "shipped";
+
+        public static final String delivered = "delivered";
+        public static final String cancel = "cancel";
+
+    }
+    public static class CustomerStage {
+        public static final String cart = "cart";
     }
     public static class DataBaseName {
         public static final String Eco = "Eco";
@@ -14,6 +20,7 @@ public class Constant {
         public static final String DBUserdata = "usersdata";
         public static final String DBProductdata = "globalproductsdata";
         public static final String Cateorydata = "list_of_cateory";
+        public static final String OrderDetail = "order_detail";
     }
     public static class Usersdata {
         public static final String userid = "user_id";
@@ -53,5 +60,15 @@ public class Constant {
         public static final String createdAt = "created_at";
         public static final String completedAt = "completed_at";
 //        public static final String status = "status";
+    }
+    public static class OrderDetail {
+        public static final String id = "_id";
+        public static final String productid = "product_id";
+        public static final String vendorid = "vendor_id";
+        public static final String customerid = "customer_id";
+        public static final String stage = "stage";
+        public static final String quantity = "quantity";
+        public static final String createdAt = "created_at";
+        public static final String completedAt = "completed_at";
     }
 }

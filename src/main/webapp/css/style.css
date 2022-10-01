@@ -1,11 +1,11 @@
 label {
-  display: flex;
-  padding-top: 10px;
-  padding-bottom: 2px;
+        display: flex;
+        padding-top: 10px;
+        padding-bottom: 2px;
 }
 
 input {
-  height: 20px;
+        height: 20px;
 }
 .container {
         border: 6px solid #f1f1f1;
@@ -91,4 +91,34 @@ th {
         background-color: green;
         color: white;
         opacity: 0.6;
+}
+.topnav {
+
+  overflow: hidden;
+  background-color: #333;
+  color: #f2f2f2;
+  padding: 14px 16px;
+}
+.reload {
+        margin-left: auto;
+        float: right;
+        display: flex;
+}
+.topnav a {
+        border-radius: 14px;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 5px 18px 14px;
+        text-decoration: none;
+        font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #04AA6D;
+  color: white;
 }

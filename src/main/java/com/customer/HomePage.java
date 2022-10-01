@@ -15,13 +15,6 @@ import java.io.PrintWriter;
 public class HomePage extends HttpServlet{
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        PrintWriter out = response.getWriter();
-
-//        JSONArray cateorys = new CustomerService().getAllCateory(Constant.DataBase_UserTableName.Cateorydata, new TableListOfCateory());
-//        System.out.println(cateorys.toString());
-//        out.print(cateorys);
-
-//        out.print(new CustomerService().getAllCateory(Constant.DataBase_UserTableName.Cateorydata, new TableListOfCateory()));
         JSONArray cateorys = new JSONArray();
         cateorys = new CustomerService().getAllCateory();
         System.out.println(cateorys.toString());

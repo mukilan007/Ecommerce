@@ -10,7 +10,6 @@ body{
 }
 .vendortab button {
         background-color: inherit;
-        float: left;
         border: none;
         outline: none;
         cursor: pointer;
@@ -22,23 +21,31 @@ body{
         background-color: #4CAF50;
         opacity: 1;
 }
-.vendortab button.active {
-  background-color: #ccc;
-}
 .tabcontent {
-           display: none;
-           border: 1px solid #ccc;
-           border-top: none;
-         }
-
-
-
-
+       display: none;
+       border: 1px solid #ccc;
+       border-top: none;
+}
 #vendor_inner_container1{
         padding: 16px;
 }
-
 #vendor_inner_container2{
         background-color:#f1f1f1;
         padding: 16px;
+}
+.reload {
+        margin-left: auto;
+        float: right;
+        display: flex;
+}
+.vendorcontainer{
+    border: 6px solid #f1f1f1;
+    position: absolute;
+    left: 40%;
+}
+#vendor_inner_container1 input{
+    padding: 5px 5px 5px 5px;
+}
+label{
+    margin-bottom: inherit;
 }

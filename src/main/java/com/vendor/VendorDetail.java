@@ -1,4 +1,4 @@
-package com.customer;
+package com.vendor;
 
 import com.Constant;
 import com.base.BaseClass;
@@ -15,43 +15,29 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.Map;
 
-@WebServlet("/cart")
-public class Cart extends HttpServlet {
-
+@WebServlet("/vendor/detail")
+public class VendorDetail extends HttpServlet {
     private String getTableName(HttpServletRequest req){
         HttpSession session = req.getSession();
         String userid = String.valueOf(session.getAttribute(Constant.Usersdata.userid));
         return "orderhistory" + userid;
     }
+    protected VendorService vendorService = new VendorService();
 
-    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String tablename = getTableName(request);
-        String stage = Constant.CustomerStage.cart;
-        JSONArray jsoncart = null;
-        try {
-            jsoncart = new CustomerService().findcard(Constant.DataBase_UserTableName.DBProductdata, tablename, stage);
-        } catch (SQLException e) {
-            response.sendError(401, "Unauthorized");
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
 
-        PrintWriter out = response.getWriter();
-        out.print(jsoncart);
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
         Map<String, String> payload = new BaseClass().getPayload(request);
+        JSONArray cateorys = new JSONArray();
         String tablename = getTableName(request);
         try {
-            new CustomerService().addcart(tablename,payload);
+            cateorys = vendorService.getProduct(tablename, payload);
         } catch (SQLException e) {
             response.sendError(401, "Unauthorized");
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
+        PrintWriter out = response.getWriter();
+        System.out.println(cateorys.toString());
+        out.print(cateorys);
     }
 }

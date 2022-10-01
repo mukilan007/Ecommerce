@@ -12,9 +12,6 @@ import com.util.Accountmanagement;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
@@ -32,7 +29,7 @@ public class CustomerService{
 //        return cateoryslist;
 //      }
     public JSONArray getAllCateory(){
-        ResultSet resultdata = rest.find(Query.findall(Constant.DataBase_UserTableName.Cateorydata));
+        ResultSet resultdata = rest.executeQuery(Query.findall(Constant.DataBase_UserTableName.Cateorydata));
         JSONArray cateoryslist = new JSONArray();
         try {
             while(resultdata.next()){
@@ -47,13 +44,13 @@ public class CustomerService{
             e.printStackTrace();
             System.out.println(e);
         }
-        System.out.println(cateoryslist.toString());
+//        System.out.println(cateoryslist.toString());
         return cateoryslist;
     }
 
 
     public JSONArray findproduct(Map<String, String> payload){
-        ResultSet resultdata = rest.find(Query.find(Constant.DataBase_UserTableName.DBProductdata,
+        ResultSet resultdata = rest.executeQuery(Query.find(Constant.DataBase_UserTableName.DBProductdata,
                 Constant.DataBase_Gobal_Products.categoryname,
                 payload.get(Constant.AllCateory.cateoryname)));
         JSONArray cateoryslist = new JSONArray();
@@ -92,22 +89,25 @@ public class CustomerService{
         return cateoryslist;
 
     }
-
-    public void addcart(String tablename, Map<String, String> payload) {
+    public void checkUserHistoryTable(String tablename){
         if(rest.checkTable(tablename)) {
             rest.createTable(Query.CreateUserHistoryTable(tablename));
         }
+    }
+    public void addcart(String tablename, Map<String, String> payload) throws SQLException {
+        checkUserHistoryTable(tablename);
         Accountmanagement accountmanagement = new Accountmanagement();
         payload.put(Constant.UserHistory.quantity, "1");
-        payload.put(Constant.UserHistory.stage,"cart");
+        payload.put(Constant.UserHistory.stage, Constant.CustomerStage.cart);
         payload.put(Constant.UserHistory.createdAt, String.valueOf(accountmanagement.getCreatedAt()));
         payload.put(Constant.UserHistory.completedAt, null);
 
-        rest.insert(Query.queryAddCart(tablename, payload));
+        rest.executeUpdate(Query.queryAddCart(tablename, payload));
     }
 
     public JSONArray findcard(String table_name1, String table_name2, String stage) throws SQLException {
-        ResultSet resultdata = rest.find(Query.findcart(table_name1, table_name2, stage));
+        checkUserHistoryTable(table_name2);
+        ResultSet resultdata = rest.executeQuery(Query.findcart(table_name1, table_name2, stage));
         int size = 0;
         if (resultdata.last()) {
             size = resultdata.getRow();
@@ -116,29 +116,24 @@ public class CustomerService{
         JSONArray productjson = new JSONArray();
         Iterator<Integer> iterator = new Iterator<Integer>(size);
         int value = 0;
-        try {
-            while(resultdata.next()){
-                JSONObject productdetails =new JSONObject();
-                productdetails.put(Constant.DataBase_Gobal_Products.product_name,
-                        resultdata.getString(Constant.DataBase_Gobal_Products.product_name));
-                productdetails.put(Constant.DataBase_Gobal_Products.brand_name,
-                        resultdata.getString(Constant.DataBase_Gobal_Products.brand_name));
-                productdetails.put(Constant.DataBase_Gobal_Products.color,
-                        resultdata.getString(Constant.DataBase_Gobal_Products.color));
-                productdetails.put(Constant.DataBase_Gobal_Products.size,
-                        resultdata.getString(Constant.DataBase_Gobal_Products.size));
-                productdetails.put(Constant.DataBase_Gobal_Products.quantity,
-                        resultdata.getString(Constant.DataBase_Gobal_Products.quantity));
-                productdetails.put(Constant.DataBase_Gobal_Products.price,
-                        resultdata.getString(Constant.DataBase_Gobal_Products.price));
-                value = Integer.parseInt((String) productdetails.get(Constant.DataBase_Gobal_Products.quantity)) * Integer.parseInt((String) productdetails.get(Constant.DataBase_Gobal_Products.price));
-                productdetails.put("totalprice", String.valueOf(value));
-                iterator.add(value);
-                productjson.add(productdetails);
-            }
-        }catch (Exception e) {
-            e.printStackTrace();
-            System.out.println(e);
+        while(resultdata.next()){
+            JSONObject productdetails =new JSONObject();
+            productdetails.put(Constant.DataBase_Gobal_Products.product_name,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.product_name));
+            productdetails.put(Constant.DataBase_Gobal_Products.brand_name,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.brand_name));
+            productdetails.put(Constant.DataBase_Gobal_Products.color,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.color));
+            productdetails.put(Constant.DataBase_Gobal_Products.size,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.size));
+            productdetails.put(Constant.DataBase_Gobal_Products.quantity,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.quantity));
+            productdetails.put(Constant.DataBase_Gobal_Products.price,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.price));
+            value = Integer.parseInt((String) productdetails.get(Constant.DataBase_Gobal_Products.quantity)) * Integer.parseInt((String) productdetails.get(Constant.DataBase_Gobal_Products.price));
+            productdetails.put("totalprice", String.valueOf(value));
+            iterator.add(value);
+            productjson.add(productdetails);
         }
 //        System.out.println(productjson.toString());
         Iterator<Integer>.InnerIterator iterator1 = iterator.getInstance();
@@ -165,8 +160,12 @@ public class CustomerService{
         }
         notification.dataChange();
     }
-    public void updatecart(String tablename, String stage) {
-        ResultSet resultdata = rest.Update(Query.update(tablename,stage));
+    public void updatecart(String cart_tablename, String order_tablename, String stage, String userid) throws SQLException{
+        ResultSet resultdata = rest.executeQuery(Query.find(cart_tablename,
+                Constant.UserHistory.stage,Constant.CustomerStage.cart));
+        Query.queryAddOrder(order_tablename, userid, stage, resultdata);
+        rest.executeUpdate(Query.delete(cart_tablename,
+                Constant.UserHistory.stage,Constant.CustomerStage.cart));
 
 //        sendNotifcation(resultdata);
     }

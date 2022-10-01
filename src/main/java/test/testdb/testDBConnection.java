@@ -42,10 +42,11 @@ public class testDBConnection {
 //        new testCreateTable().createUserTable();
 //        new testCreateTable().createCateory();
 //        new testCreateTable().createUserHistory();
+        new testCreateTable().createOrderDetail();
 
         //User -> customer
 //        new testUserManipulation().finddata();
-        new testUserManipulation().findCartData();
+//        new testUserManipulation().findCartData();
 
         //vendor
 //        new testVendorManipulation().addGlobalProductsData();
@@ -71,6 +72,15 @@ class testCreateTable extends testDBConnection{
             System.out.println("already existed");
         }
     }
+    public void createOrderDetail() throws SQLException {
+        String tablename = Constant.DataBase_UserTableName.OrderDetail;
+        if(rest.checkTable(tablename)) {
+            rest.createTable(Query.CreateOrderDetail(tablename));
+        }
+        else{
+            System.out.println("already existed");
+        }
+    }
 }
 
 class testUserManipulation extends testDBConnection{
@@ -80,7 +90,7 @@ class testUserManipulation extends testDBConnection{
         payload.put(Constant.Usersdata.password, "1234");
 
         List<String> list = new ArrayList<String>();
-        ResultSet resultdata = rest.find(Query.find(Constant.DataBase_UserTableName.DBUserdata,
+        ResultSet resultdata = rest.executeQuery(Query.find(Constant.DataBase_UserTableName.DBUserdata,
                 Constant.Usersdata.email, payload.get(Constant.Usersdata.email)));      //view record
         try {
             while(resultdata.next()){
@@ -104,8 +114,8 @@ class testUserManipulation extends testDBConnection{
 
     public void findCartData() {
         String tablename = "orderhistory2";
-        String stage = Constant.Stage.Cart;
-        ResultSet resultdata = rest.find(Query.findcart(Constant.DataBase_UserTableName.DBProductdata, tablename, stage));
+        String stage = Constant.CustomerStage.cart;
+        ResultSet resultdata = rest.executeQuery(Query.findcart(Constant.DataBase_UserTableName.DBProductdata, tablename, stage));
         JSONArray cateoryslist = new JSONArray();
         try {
             while(resultdata.next()){
@@ -147,11 +157,19 @@ class testVendorManipulation extends testDBConnection{
         payload.put("color", "color");
         payload.put("price", "1499");
         payload.put("quantity", "90");
-        rest.insert(Query.queryAddProduct(Constant.DataBase_UserTableName.DBProductdata,"1", payload));
+        try {
+            rest.executeUpdate(Query.queryAddProduct(Constant.DataBase_UserTableName.DBProductdata,"1", payload));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void addCateory(){
         String payload = "categoryname";
-        rest.insert(Query.queryAddCateory(Constant.DataBase_UserTableName.Cateorydata, payload));
+        try {
+            rest.executeUpdate(Query.queryAddCateory(Constant.DataBase_UserTableName.Cateorydata, payload));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

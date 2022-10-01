@@ -2,9 +2,7 @@ package com.db;
 
 import com.Constant;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Map;
 
 public class Query {
@@ -22,6 +20,9 @@ public class Query {
     public static String CreateUserHistoryTable(String table_name) {
         return new Schema(table_name).createUserHistory();
     }
+    public static String CreateOrderDetail(String table_name) {
+        return new Schema(table_name).createOrderDetail();
+    }
 
 
     public static String find(String table_name,String value, String payload){
@@ -32,6 +33,7 @@ public class Query {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        System.out.println("find  " + String.valueOf(preparedStatement));
         return String.valueOf(preparedStatement);
     }
 
@@ -57,6 +59,7 @@ public class Query {
                 " ON "+ table_name1 +"."+ Constant.DataBase_Gobal_Products.productid +"=" +
                 table_name2 +"."+ Constant.UserHistory.productid +
                 " WHERE "+Constant.UserHistory.stage+" = '"+ condition +"';";
+        System.out.println("findcart  " + find);
         return find;
     }
 
@@ -116,7 +119,6 @@ public class Query {
         }
         return String.valueOf(preparedStatement);
     }
-
     public static String queryAddCart(String table_name, Map<String, String> payload) {
         try {
             String add = "insert into "+table_name+
@@ -134,6 +136,22 @@ public class Query {
         }
         return String.valueOf(preparedStatement);
     }
+    public static void queryAddOrder(String table_name,String userid, String stage, ResultSet payload) throws SQLException {
+        String add = "insert into "+table_name+
+                " (product_id, vendor_id, customer_id, quantity, stage, created_at) values (?,?,?,?,?,?);";
+        preparedStatement = connection.prepareStatement(add);
+        while(payload.next()){
+            preparedStatement.setInt(1, Integer.parseInt(payload.getString(Constant.OrderDetail.productid)));
+            preparedStatement.setInt(2, Integer.parseInt(payload.getString(Constant.OrderDetail.vendorid)));
+            preparedStatement.setInt(3, Integer.parseInt(userid));
+            preparedStatement.setInt(4, Integer.parseInt(payload.getString(Constant.OrderDetail.quantity)));
+            preparedStatement.setString(5, stage);
+            preparedStatement.setTimestamp(6, Timestamp.valueOf(payload.getString(Constant.OrderDetail.createdAt)));
+            preparedStatement.addBatch();
+        }
+        System.out.println("queryAddOrder  " + String.valueOf(preparedStatement));
+        preparedStatement.executeBatch();
+    }
 
     public static String update(String table_name, String stage) {
         try {
@@ -145,7 +163,18 @@ public class Query {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        System.out.println(String.valueOf(preparedStatement));
+        System.out.println("update  " + String.valueOf(preparedStatement));
+        return String.valueOf(preparedStatement);
+    }
+    public static String delete(String table_name,String Condition, String stage) {
+        try {
+            String update = "delete from "+ table_name +" where "+ Condition +"='" + stage + "';";
+            preparedStatement = connection.prepareStatement(update);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        System.out.println("update  " + String.valueOf(preparedStatement));
         return String.valueOf(preparedStatement);
     }
 }

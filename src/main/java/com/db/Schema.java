@@ -59,4 +59,16 @@ public class Schema {
                 Constant.UserHistory.completedAt+" TIMESTAMP default NULL" +
                 ");";
     }
+    public String createOrderDetail() {
+        return "create table "+table_name+" (" +
+                Constant.OrderDetail.id+" serial PRIMARY KEY," +
+                Constant.OrderDetail.productid+" BIGINT NOT NULL," +
+                Constant.OrderDetail.vendorid+" BIGINT NOT NULL," +
+                Constant.OrderDetail.customerid+" BIGINT NOT NULL," +
+                Constant.OrderDetail.quantity+" BIGINT NOT NULL," +
+                Constant.OrderDetail.stage+" VARCHAR(100) NOT NULL," +
+                Constant.OrderDetail.createdAt+" TIMESTAMP default NULL," +
+                Constant.OrderDetail.completedAt+" TIMESTAMP default NULL" +
+                ");";
+    }
 }

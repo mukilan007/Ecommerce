@@ -8,10 +8,10 @@ function generateorder() {
         success: function(usertype, name){
             alert("ordered placed")
             refresh();
-            window.location.href
         },
         error: function(){
             alert("error occurs")
+            refresh();
         }
         });
 }
@@ -34,8 +34,6 @@ function insertintotable(data) {
         col4.innerHTML = data[i].quantity;
         col5 = newRow.insertCell(5);
         col5.innerHTML = data[i].price;
-        col6 = newRow.insertCell(6);
-        col6.innerHTML = data[i].totalprice;
    }
    var page =`<div class="dis_amount">
                 <p><b>Total Amount: </b>`+data[data.length-1]+`</p>
