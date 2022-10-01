@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.Map;
 
 @WebServlet("/view/product")
@@ -19,7 +20,13 @@ public class ViewProduct extends HttpServlet {
         Map<String, String> payload = new BaseClass().getPayload(request);
         PrintWriter out = response.getWriter();
 
-        out.print(new CustomerService().findproduct(payload));
+        try {
+            out.print(new CustomerService().findproduct(payload));
+        } catch (SQLException e) {
+            response.sendError(401, "Unauthorized");
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
 //        System.out.println(cateorys.toString());
 
 

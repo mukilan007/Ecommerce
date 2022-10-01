@@ -90,8 +90,14 @@ class testUserManipulation extends testDBConnection{
         payload.put(Constant.Usersdata.password, "1234");
 
         List<String> list = new ArrayList<String>();
-        ResultSet resultdata = rest.executeQuery(Query.find(Constant.DataBase_UserTableName.DBUserdata,
-                Constant.Usersdata.email, payload.get(Constant.Usersdata.email)));      //view record
+        String condition = " "+ Constant.Usersdata.email +" = '"+ payload.get(Constant.Usersdata.email) +"';";
+        ResultSet resultdata = null;      //view record
+        try {
+            resultdata = rest.executeQuery(Query.find(Constant.DataBase_UserTableName.DBUserdata, condition));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
         try {
             while(resultdata.next()){
                 list.add(resultdata.getString(Constant.Usersdata.userid));
@@ -115,7 +121,9 @@ class testUserManipulation extends testDBConnection{
     public void findCartData() {
         String tablename = "orderhistory2";
         String stage = Constant.CustomerStage.cart;
-        ResultSet resultdata = rest.executeQuery(Query.findcart(Constant.DataBase_UserTableName.DBProductdata, tablename, stage));
+        String condition = " "+ Constant.UserHistory.stage +" = '"+ stage +"';";
+        ResultSet resultdata = rest.executeQuery(Query.findcart(Constant.DataBase_UserTableName.DBProductdata, tablename,
+                condition));
         JSONArray cateoryslist = new JSONArray();
         try {
             while(resultdata.next()){

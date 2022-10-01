@@ -18,10 +18,10 @@ public class LoginService {
     public LoginService(){
         rest = RESTOperation.getInstance();
     }
-    public boolean SignIn(HttpServletRequest request, Map<String, String> payload){
+    public boolean SignIn(HttpServletRequest request, Map<String, String> payload) throws SQLException {
         List<String> list = new ArrayList<String>();
-        ResultSet resultdata = rest.executeQuery(Query.find(Constant.DataBase_UserTableName.DBUserdata,
-                Constant.Usersdata.email,payload.get(Constant.Usersdata.email)));
+        String condition = " "+ Constant.Usersdata.email +" = '"+ payload.get(Constant.Usersdata.email) +"';";
+        ResultSet resultdata = rest.executeQuery(Query.find(Constant.DataBase_UserTableName.DBUserdata, condition));
         try {
             while(resultdata.next()){
                 list.add(resultdata.getString(Constant.Usersdata.userid));

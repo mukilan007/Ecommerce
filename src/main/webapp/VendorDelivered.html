@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--  <meta charset="UTF-8">-->
+  <title>Eco</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/vendor.css">
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body onload="event.preventDefault();getvendordeatil('delivered');">
+<div>
+  <div class="topnav">
+    <a href="/Eco/VendorHomePage.html">Home</a>
+    <a href="/Eco/AddProduct.html">Add</a>
+    <a class="reload" href="/Eco/VendorDelivery.html">Delivery</a>
+    <a class="active" class="reload" onclick="getvendordeatil('delivered');">Delivered</a>
+    <a class="reload" onclick="logout()">Logout</a>
+  </div>
+  <form id="addform">
+    <table id="cartlist">
+      <thead>
+      <tr>
+        <th>Product Name</th>
+        <th>Brand Name</th>
+        <th>Color</th>
+        <th>Size</th>
+        <th>Quantity</th>
+        <th>Price</th>
+      </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </form>
+</div>
+<script src="js/vendor.js"></script>
+</body>
+</html>

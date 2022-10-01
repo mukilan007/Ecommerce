@@ -25,14 +25,9 @@ public class Query {
     }
 
 
-    public static String find(String table_name,String value, String payload){
-        String find  = "select * from "+ table_name +" where "+value+"=?";
-        try {
-            preparedStatement = connection.prepareStatement(find);
-            preparedStatement.setString(1, payload);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public static String find(String table_name,String condition) throws SQLException {
+        String find  = "select * from "+ table_name +" where"+condition ;
+        preparedStatement = connection.prepareStatement(find);
         System.out.println("find  " + String.valueOf(preparedStatement));
         return String.valueOf(preparedStatement);
     }
@@ -58,7 +53,7 @@ public class Query {
                 " FROM "+ table_name1 +" INNER JOIN "+ table_name2 +
                 " ON "+ table_name1 +"."+ Constant.DataBase_Gobal_Products.productid +"=" +
                 table_name2 +"."+ Constant.UserHistory.productid +
-                " WHERE "+Constant.UserHistory.stage+" = '"+ condition +"';";
+                " WHERE"+ condition ;
         System.out.println("findcart  " + find);
         return find;
     }

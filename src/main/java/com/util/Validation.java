@@ -22,8 +22,8 @@ public class Validation {
 
     public void checkCateory() throws SQLException {
         List<String> list = new ArrayList<String>();
-        ResultSet resultdata = rest.executeQuery(Query.find(Constant.DataBase_UserTableName.Cateorydata,
-                Constant.AllCateory.cateoryname, cateoryname));
+        String condition = " "+ Constant.AllCateory.cateoryname +" = '"+ cateoryname +"';";
+        ResultSet resultdata = rest.executeQuery(Query.find(Constant.DataBase_UserTableName.Cateorydata, condition));
         try {
             while(resultdata.next()){
                 list.add(resultdata.getString(Constant.AllCateory.cateoryname));

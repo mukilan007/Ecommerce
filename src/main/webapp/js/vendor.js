@@ -1,6 +1,6 @@
 function insertintotable(data) {
     console.log(data);
-    for (let i = 0; i < data.length-1; i++) {
+    for (let i = 0; i < data.length; i++) {
         var table = document.getElementById("cartlist").getElementsByTagName('tbody')[0];
         var newRow = table.insertRow(table.length);
         col0 = newRow.insertCell(0);
@@ -33,10 +33,21 @@ function autoVendorPage() {
         });
 }
 
-function getvendordeatil(delivery) {
+function getvendordeatil(stage) {
+    var payload = {"stage": stage};
     $.ajax({
             url : "vendor/detail",
             method : 'GET',
+            type: "json",
+            data: {"payload" : JSON.stringify(payload)},
+            cache: false,
+            success : function(result) {
+                        var product = $.parseJSON(result);
+                        insertintotable(product);
+                     },
+            error: function(){
+                alert("error occurs");
+            }
         });
 }
 

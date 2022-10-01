@@ -24,17 +24,23 @@ public class SignIn extends HttpServlet {
             throws ServletException, IOException {
         Map<String, String> payload = new BaseClass().getPayload(request);
 
-        if(payload == null || !(loginService.SignIn(request, payload)))
+        try {
+            if(payload == null || !(loginService.SignIn(request, payload)))
+                response.sendError(401, "Unauthorized");
+            else {
+                HttpSession session = request.getSession();
+                String name = (String) session.getAttribute(Constant.Usersdata.name);
+                String type = (String) session.getAttribute(Constant.Usersdata.isadmin);
+                PrintWriter out = response.getWriter();
+                if(type.equals("t"))
+                    out.printf("isadmin", name);        //TODO: need to need two parameter to js
+                else
+                    out.printf("notadmin", name);
+            }
+        } catch (SQLException e) {
             response.sendError(401, "Unauthorized");
-        else {
-            HttpSession session = request.getSession();
-            String name = (String) session.getAttribute(Constant.Usersdata.name);
-            String type = (String) session.getAttribute(Constant.Usersdata.isadmin);
-            PrintWriter out = response.getWriter();
-            if(type.equals("t"))
-                out.printf("isadmin", name);        //TODO: need to need two parameter to js
-            else
-                out.printf("notadmin", name);
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

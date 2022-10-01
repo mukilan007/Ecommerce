@@ -49,10 +49,10 @@ public class CustomerService{
     }
 
 
-    public JSONArray findproduct(Map<String, String> payload){
-        ResultSet resultdata = rest.executeQuery(Query.find(Constant.DataBase_UserTableName.DBProductdata,
-                Constant.DataBase_Gobal_Products.categoryname,
-                payload.get(Constant.AllCateory.cateoryname)));
+    public JSONArray findproduct(Map<String, String> payload) throws SQLException {
+        String condition = " "+ Constant.DataBase_Gobal_Products.categoryname +" = '"+
+                payload.get(Constant.AllCateory.cateoryname) +"';";
+        ResultSet resultdata = rest.executeQuery(Query.find(Constant.DataBase_UserTableName.DBProductdata, condition));
         JSONArray cateoryslist = new JSONArray();
         try {
             while(resultdata.next()){
@@ -107,7 +107,8 @@ public class CustomerService{
 
     public JSONArray findcard(String table_name1, String table_name2, String stage) throws SQLException {
         checkUserHistoryTable(table_name2);
-        ResultSet resultdata = rest.executeQuery(Query.findcart(table_name1, table_name2, stage));
+        String condition = " "+ Constant.UserHistory.stage +" = '"+ stage +"';";
+        ResultSet resultdata = rest.executeQuery(Query.findcart(table_name1, table_name2, condition));
         int size = 0;
         if (resultdata.last()) {
             size = resultdata.getRow();
@@ -161,8 +162,8 @@ public class CustomerService{
         notification.dataChange();
     }
     public void updatecart(String cart_tablename, String order_tablename, String stage, String userid) throws SQLException{
-        ResultSet resultdata = rest.executeQuery(Query.find(cart_tablename,
-                Constant.UserHistory.stage,Constant.CustomerStage.cart));
+        String condition = " "+ Constant.UserHistory.stage +" = '"+ Constant.CustomerStage.cart +"';";
+        ResultSet resultdata = rest.executeQuery(Query.find(cart_tablename, condition));
         Query.queryAddOrder(order_tablename, userid, stage, resultdata);
         rest.executeUpdate(Query.delete(cart_tablename,
                 Constant.UserHistory.stage,Constant.CustomerStage.cart));
