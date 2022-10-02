@@ -1,7 +1,6 @@
 package com.db;
 
 import com.Constant;
-import com.util.Accountmanagement;
 
 import java.sql.*;
 import java.util.Map;
@@ -42,7 +41,7 @@ public class Query {
         }
         return String.valueOf(preparedStatement);
     }
-    public static String finddelivery(String table_name1, String table_name2, String condition) {
+    public static String findorder(String table_name1, String table_name2, String condition) {
         String find  = "SELECT "+
                 table_name2 +"."+ Constant.OrderDetail.id+ "," +
                 table_name2 + "."+ Constant.OrderDetail.productid+ "," +

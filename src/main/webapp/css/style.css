@@ -121,3 +121,7 @@ th {
   background-color: #04AA6D;
   color: white;
 }
+#cartlist #cancel{
+    background-color: #F75C3C;
+    border-radius: 14px;
+}

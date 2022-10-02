@@ -100,6 +100,8 @@ public class CustomerService{
         int value = 0;
         while(resultdata.next()){
             JSONObject productdetails =new JSONObject();
+//            productdetails.put(Constant.OrderDetail.id,
+//                    resultdata.getString(Constant.OrderDetail.id));
             productdetails.put(Constant.UserHistory.productid,
                     resultdata.getString(Constant.UserHistory.productid));
             productdetails.put(Constant.UserHistory.vendorid,
