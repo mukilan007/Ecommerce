@@ -42,10 +42,26 @@ public class Query {
         }
         return String.valueOf(preparedStatement);
     }
-
-    public static String findcart(String table_name1, String table_name2, String condition) {
+    public static String finddelivery(String table_name1, String table_name2, String condition) {
         String find  = "SELECT "+
                 table_name2 +"."+ Constant.OrderDetail.id+ "," +
+                table_name2 + "."+ Constant.OrderDetail.productid+ "," +
+                table_name2 + "."+ Constant.OrderDetail.vendorid+ "," +
+                table_name1 +"."+ Constant.DataBase_Gobal_Products.product_name+ "," +
+                table_name1 +"."+ Constant.DataBase_Gobal_Products.brand_name+ "," +
+                table_name1 +"."+ Constant.DataBase_Gobal_Products.color+ "," +
+                table_name1 +"."+ Constant.DataBase_Gobal_Products.size+ "," +
+                table_name2 +"."+ Constant.OrderDetail.quantity+ "," +
+                table_name1 +"."+ Constant.DataBase_Gobal_Products.price+
+                " FROM "+ table_name1 +" INNER JOIN "+ table_name2 +
+                " ON "+ table_name1 +"."+ Constant.DataBase_Gobal_Products.productid +"=" +
+                table_name2 +"."+ Constant.OrderDetail.productid +
+                " WHERE"+ condition ;
+        System.out.println("findcart  " + find);
+        return find;
+    }
+    public static String findcart(String table_name1, String table_name2, String condition) {
+        String find  = "SELECT "+
                 table_name2 + "."+ Constant.OrderDetail.productid+ "," +
                 table_name2 + "."+ Constant.OrderDetail.vendorid+ "," +
                 table_name1 +"."+ Constant.DataBase_Gobal_Products.product_name+ "," +
@@ -155,13 +171,15 @@ public class Query {
                                                String stage) throws SQLException {
         String add = "insert into "+table_name+
                 " (product_id, vendor_id, quantity, stage, created_at, completed_at) values (?,?,?,?,?,?);";
-        preparedStatement = connection.prepareStatement(add);
-        preparedStatement.setString(1, payload.getString(Constant.OrderDetail.productid));
-        preparedStatement.setString(2, payload.getString(Constant.OrderDetail.vendorid));
-        preparedStatement.setString(3, payload.getString(Constant.OrderDetail.quantity));
-        preparedStatement.setString(4, stage);
-        preparedStatement.setString(5, payload.getString(Constant.OrderDetail.createdAt));
-        preparedStatement.setString(6, completedAt);
+        while(payload.next()) {
+            preparedStatement = connection.prepareStatement(add);
+            preparedStatement.setString(1, payload.getString(Constant.OrderDetail.productid));
+            preparedStatement.setString(2, payload.getString(Constant.OrderDetail.vendorid));
+            preparedStatement.setString(3, payload.getString(Constant.OrderDetail.quantity));
+            preparedStatement.setString(4, stage);
+            preparedStatement.setString(5, payload.getString(Constant.OrderDetail.createdAt));
+            preparedStatement.setString(6, completedAt);
+        }
         System.out.println("queryAddOrder  " + String.valueOf(preparedStatement));
 //        preparedStatement.executeBatch();
         return (String.valueOf(preparedStatement));

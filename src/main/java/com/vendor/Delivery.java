@@ -17,7 +17,7 @@ public class Delivery implements Strategy{
     public JSONArray getProduct(String product_tablename, String deliver_tablename, String stage, String value) throws SQLException {
         String condition = " "+ Constant.UserHistory.stage +" = '"+ stage +"'" +
                 " and "+ deliver_tablename+"."+ Constant.UserHistory.vendorid +" = '"+ value +"';";
-        ResultSet resultdata = rest.executeQuery(Query.findcart(product_tablename, deliver_tablename, condition));
-        return new ResultSettoJSON().ProductTable(resultdata);
+        ResultSet resultdata = rest.executeQuery(Query.finddelivery(product_tablename, deliver_tablename, condition));
+        return new ResultSettoJSON().ProductTable(resultdata, stage);
     }
 }

@@ -8,12 +8,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ResultSettoJSON {
-    public JSONArray ProductTable(ResultSet resultdata) throws SQLException {
+
+    public JSONArray ProductTable(ResultSet resultdata, String type) throws SQLException {
         JSONArray productjson = new JSONArray();
         while(resultdata.next()){
             JSONObject productdetails =new JSONObject();
-            productdetails.put(Constant.OrderDetail.id,
-                    resultdata.getString(Constant.OrderDetail.id));
+            if(type.equals(Constant.VendorStage.ordered)) {
+                productdetails.put(Constant.OrderDetail.id,
+                        resultdata.getString(Constant.OrderDetail.id));
+            }
             productdetails.put(Constant.OrderDetail.productid,
                     resultdata.getString(Constant.OrderDetail.productid));
             productdetails.put(Constant.OrderDetail.vendorid,

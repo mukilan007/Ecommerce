@@ -96,9 +96,14 @@ function getvendordeatil(stage) {
             data: {"payload" : JSON.stringify(payload)},
             cache: false,
             success : function(result) {
-                        var product = $.parseJSON(result);
-                        insertintodeliverytable(product);
-                     },
+                var product = $.parseJSON(result);
+                if(stage == "ordered") {
+                    insertintodeliverytable(product);
+                }
+                else {
+                    insertintotable(product);
+                }
+            },
             error: function(){
                 alert("error occurs");
             }
