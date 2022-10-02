@@ -33,7 +33,28 @@ public class VendorService {
     public JSONArray getCateory(String userid) throws SQLException {
         String condition = " "+ Constant.DataBase_Gobal_Products.vendorid +" = '"+ userid +"';";
         ResultSet resultdata = rest.executeQuery(Query.find(Constant.DataBase_UserTableName.DBProductdata, condition));
-        return new ProductTable().ResultSettoJSON(resultdata);
+        JSONArray productjson = new JSONArray();
+        while(resultdata.next()){
+            JSONObject productdetails =new JSONObject();
+            productdetails.put(Constant.OrderDetail.productid,
+                    resultdata.getString(Constant.OrderDetail.productid));
+            productdetails.put(Constant.OrderDetail.vendorid,
+                    resultdata.getString(Constant.OrderDetail.vendorid));
+            productdetails.put(Constant.DataBase_Gobal_Products.product_name,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.product_name));
+            productdetails.put(Constant.DataBase_Gobal_Products.brand_name,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.brand_name));
+            productdetails.put(Constant.DataBase_Gobal_Products.color,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.color));
+            productdetails.put(Constant.DataBase_Gobal_Products.size,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.size));
+            productdetails.put(Constant.DataBase_Gobal_Products.quantity,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.quantity));
+            productdetails.put(Constant.DataBase_Gobal_Products.price,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.price));
+            productjson.add(productdetails);
+        }
+        return productjson;
     }
     public void addProduct(String userid, Map<String, String> payload) throws SQLException {
         Validation validation = new Validation();
@@ -44,16 +65,34 @@ public class VendorService {
                 userid,payload));
     }
 
-    public JSONArray getProduct(String product_tablename, String order_tablename, String stage, String userid) throws SQLException {
-        String condition = " "+ Constant.UserHistory.stage +" = '"+ stage +"' " +
-                " and "+ order_tablename+"."+ Constant.UserHistory.vendorid +" = '"+ userid +"';";
-        ResultSet resultdata = rest.executeQuery(Query.findcart(product_tablename, order_tablename, condition));
-        return new ProductTable().ResultSettoJSON(resultdata);
+    public void deleteProduct(String orderid) throws SQLException {
+        String order_tablename = Constant.DataBase_UserTableName.OrderDetail;
+        rest.executeUpdate(Query.delete(order_tablename,Constant.OrderDetail.id,orderid));
     }
 
-    public JSONArray getDelivered(String delivered_tablename, String stagename, String stage) throws SQLException {
-        String condition = " "+ stagename +" = '"+ stage +"';";
-        ResultSet resultdata = rest.executeQuery(Query.find(delivered_tablename, condition));
-        return new ProductTable().ResultSettoJSON(resultdata);
+    public void updateDelivery(String history_tablename, String value) throws SQLException {
+        String order_tablename = Constant.DataBase_UserTableName.OrderDetail;
+        String condition = " "+ Constant.OrderDetail.id +" = '"+ value +"';";
+        Accountmanagement accountmanagement = new Accountmanagement();
+        String completedAt = String.valueOf(accountmanagement.getTimeNow());
+        String stage = Constant.VendorStage.delivered;
+
+        ResultSet resultdata = rest.executeQuery(Query.find(order_tablename, condition));
+        rest.executeUpdate(Query.queryAddOrder_history(history_tablename, resultdata, completedAt, stage));
+        deleteProduct(value);
+
     }
+
+//    public JSONArray getProduct(String product_tablename, String order_tablename, String stage, String userid) throws SQLException {
+//        String condition = " "+ Constant.UserHistory.stage +" = '"+ stage +"' " +
+//                " and "+ order_tablename+"."+ Constant.UserHistory.vendorid +" = '"+ userid +"';";
+//        ResultSet resultdata = rest.executeQuery(Query.findcart(product_tablename, order_tablename, condition));
+//        return new ResultSettoJSON().ProductTable(resultdata);
+//    }
+
+//    public JSONArray getDelivered(String product_tablename, String delivered_tablename, String stagename, String stage) throws SQLException {
+//        String condition = " "+ stagename +" = '"+ stage +"';";
+//        ResultSet resultdata = rest.executeQuery(Query.find(delivered_tablename, condition));
+//        return new ResultSettoJSON().ProductTable(resultdata);
+//    }
 }

@@ -9,6 +9,7 @@ import com.notification.Notification;
 import com.notification.SMSnotification;
 import com.util.Accountmanagement;
 
+import com.util.ResultSettoJSON;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -28,24 +29,9 @@ public class CustomerService{
 ////        System.out.println(cateoryslist.toString());
 //        return cateoryslist;
 //      }
-    public JSONArray getAllCateory(){
+    public JSONArray getAllCateory() throws SQLException {
         ResultSet resultdata = rest.executeQuery(Query.findall(Constant.DataBase_UserTableName.Cateorydata));
-        JSONArray cateoryslist = new JSONArray();
-        try {
-            while(resultdata.next()){
-                JSONObject cateorydetails =new JSONObject();
-                cateorydetails.put(Constant.AllCateory.cateoryid,
-                        resultdata.getString(Constant.AllCateory.cateoryid));
-                cateorydetails.put(Constant.AllCateory.cateoryname,
-                        resultdata.getString(Constant.AllCateory.cateoryname));
-                cateoryslist.add(cateorydetails);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            System.out.println(e);
-        }
-//        System.out.println(cateoryslist.toString());
-        return cateoryslist;
+        return new ResultSettoJSON().TableListOfCateory(resultdata);
     }
 
 
@@ -54,37 +40,32 @@ public class CustomerService{
                 payload.get(Constant.AllCateory.cateoryname) +"';";
         ResultSet resultdata = rest.executeQuery(Query.find(Constant.DataBase_UserTableName.DBProductdata, condition));
         JSONArray cateoryslist = new JSONArray();
-        try {
-            while(resultdata.next()){
-                JSONObject cateorydetails =new JSONObject();
-                cateorydetails.put(Constant.DataBase_Gobal_Products.productid,
-                        resultdata.getString(Constant.DataBase_Gobal_Products.productid));
-                cateorydetails.put(Constant.DataBase_Gobal_Products.vendorid,
-                        resultdata.getString(Constant.DataBase_Gobal_Products.vendorid));
-                cateorydetails.put(Constant.DataBase_Gobal_Products.product_name,
-                        resultdata.getString(Constant.DataBase_Gobal_Products.product_name));
-                cateorydetails.put(Constant.DataBase_Gobal_Products.categoryname,
-                        resultdata.getString(Constant.DataBase_Gobal_Products.categoryname));
-                cateorydetails.put(Constant.DataBase_Gobal_Products.detail,
-                        resultdata.getString(Constant.DataBase_Gobal_Products.detail));
-                cateorydetails.put(Constant.DataBase_Gobal_Products.quantity,
-                        resultdata.getString(Constant.DataBase_Gobal_Products.quantity));
-                cateorydetails.put(Constant.DataBase_Gobal_Products.size,
-                        resultdata.getString(Constant.DataBase_Gobal_Products.size));
-                cateorydetails.put(Constant.DataBase_Gobal_Products.color,
-                        resultdata.getString(Constant.DataBase_Gobal_Products.color));
-                cateorydetails.put(Constant.DataBase_Gobal_Products.brand_name,
-                        resultdata.getString(Constant.DataBase_Gobal_Products.brand_name));
-                cateorydetails.put(Constant.DataBase_Gobal_Products.price,
-                        resultdata.getString(Constant.DataBase_Gobal_Products.price));
-                cateorydetails.put(Constant.DataBase_Gobal_Products.type,
-                        resultdata.getString(Constant.DataBase_Gobal_Products.type));
+        while(resultdata.next()){
+            JSONObject cateorydetails =new JSONObject();
+            cateorydetails.put(Constant.DataBase_Gobal_Products.productid,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.productid));
+            cateorydetails.put(Constant.DataBase_Gobal_Products.vendorid,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.vendorid));
+            cateorydetails.put(Constant.DataBase_Gobal_Products.product_name,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.product_name));
+            cateorydetails.put(Constant.DataBase_Gobal_Products.categoryname,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.categoryname));
+            cateorydetails.put(Constant.DataBase_Gobal_Products.detail,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.detail));
+            cateorydetails.put(Constant.DataBase_Gobal_Products.quantity,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.quantity));
+            cateorydetails.put(Constant.DataBase_Gobal_Products.size,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.size));
+            cateorydetails.put(Constant.DataBase_Gobal_Products.color,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.color));
+            cateorydetails.put(Constant.DataBase_Gobal_Products.brand_name,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.brand_name));
+            cateorydetails.put(Constant.DataBase_Gobal_Products.price,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.price));
+            cateorydetails.put(Constant.DataBase_Gobal_Products.type,
+                    resultdata.getString(Constant.DataBase_Gobal_Products.type));
 
-                cateoryslist.add(cateorydetails);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            System.out.println(e);
+            cateoryslist.add(cateorydetails);
         }
         return cateoryslist;
 
@@ -119,6 +100,10 @@ public class CustomerService{
         int value = 0;
         while(resultdata.next()){
             JSONObject productdetails =new JSONObject();
+            productdetails.put(Constant.UserHistory.productid,
+                    resultdata.getString(Constant.UserHistory.productid));
+            productdetails.put(Constant.UserHistory.vendorid,
+                    resultdata.getString(Constant.UserHistory.vendorid));
             productdetails.put(Constant.DataBase_Gobal_Products.product_name,
                     resultdata.getString(Constant.DataBase_Gobal_Products.product_name));
             productdetails.put(Constant.DataBase_Gobal_Products.brand_name,
@@ -127,8 +112,8 @@ public class CustomerService{
                     resultdata.getString(Constant.DataBase_Gobal_Products.color));
             productdetails.put(Constant.DataBase_Gobal_Products.size,
                     resultdata.getString(Constant.DataBase_Gobal_Products.size));
-            productdetails.put(Constant.DataBase_Gobal_Products.quantity,
-                    resultdata.getString(Constant.DataBase_Gobal_Products.quantity));
+            productdetails.put(Constant.UserHistory.quantity,
+                    resultdata.getString(Constant.UserHistory.quantity));
             productdetails.put(Constant.DataBase_Gobal_Products.price,
                     resultdata.getString(Constant.DataBase_Gobal_Products.price));
             value = Integer.parseInt((String) productdetails.get(Constant.DataBase_Gobal_Products.quantity)) * Integer.parseInt((String) productdetails.get(Constant.DataBase_Gobal_Products.price));
@@ -145,19 +130,14 @@ public class CustomerService{
         productjson.add(totalamount);
         return productjson;
     }
-    public void sendNotifcation(ResultSet resultdata){
+    public void sendNotifcation(ResultSet resultdata) throws SQLException {
         Emailnotification emailnotification = new Emailnotification();
         SMSnotification smsnotification = new SMSnotification();
 
         Notification notification = new Notification(emailnotification, smsnotification);
-        try {
-            while(resultdata.next()){
-                notification.add(resultdata.getString(Constant.UserHistory.productid),
-                        resultdata.getString(Constant.UserHistory.vendorid));
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            System.out.println(e);
+        while(resultdata.next()){
+            notification.add(resultdata.getString(Constant.UserHistory.productid),
+                    resultdata.getString(Constant.UserHistory.vendorid));
         }
         notification.dataChange();
     }

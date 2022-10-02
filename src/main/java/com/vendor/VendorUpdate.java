@@ -1,5 +1,6 @@
 package com.vendor;
 
+import com.Constant;
 import com.base.BaseClass;
 
 import javax.servlet.ServletException;
@@ -7,7 +8,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Map;
 
 @WebServlet("/vendor/edit")
@@ -15,13 +18,25 @@ public class VendorUpdate extends HttpServlet {
     public VendorUpdate(){
         super();
     }
+    private String getUserID(HttpServletRequest req) {
+        HttpSession session = req.getSession();
+        return String.valueOf(session.getAttribute(Constant.Usersdata.userid));
+    }
+    private String getTableName(HttpServletRequest req){
+        return "orderhistory" + getUserID(req);
+    }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Map<String, String> payload = new BaseClass().getPayload(request);
 
-        for(String i :payload.keySet()){
-            System.out.println(i+": "+payload.get(i));
+        String history_tablename = getTableName(request);
+        try {
+        new VendorService().updateDelivery(history_tablename, payload.get(Constant.OrderDetail.id));
+        } catch (SQLException e) {
+            response.sendError(401, "Unauthorized");
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 }

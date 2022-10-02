@@ -128,6 +128,10 @@ class testUserManipulation extends testDBConnection{
         try {
             while(resultdata.next()){
                 JSONObject cateorydetails =new JSONObject();
+                cateorydetails.put(Constant.OrderDetail.productid,
+                        resultdata.getString(Constant.OrderDetail.productid));
+                cateorydetails.put(Constant.OrderDetail.vendorid,
+                        resultdata.getString(Constant.OrderDetail.vendorid));
                 cateorydetails.put(Constant.DataBase_Gobal_Products.product_name,
                         resultdata.getString(Constant.DataBase_Gobal_Products.product_name));
                 cateorydetails.put(Constant.DataBase_Gobal_Products.brand_name,
@@ -136,8 +140,8 @@ class testUserManipulation extends testDBConnection{
                         resultdata.getString(Constant.DataBase_Gobal_Products.color));
                 cateorydetails.put(Constant.DataBase_Gobal_Products.size,
                         resultdata.getString(Constant.DataBase_Gobal_Products.size));
-                cateorydetails.put(Constant.DataBase_Gobal_Products.quantity,
-                        resultdata.getString(Constant.DataBase_Gobal_Products.quantity));
+                cateorydetails.put(Constant.OrderDetail.quantity,
+                        resultdata.getString(Constant.OrderDetail.quantity));
                 cateorydetails.put(Constant.DataBase_Gobal_Products.price,
                         resultdata.getString(Constant.DataBase_Gobal_Products.price));
                 cateoryslist.add(cateorydetails);

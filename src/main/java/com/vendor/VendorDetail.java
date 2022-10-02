@@ -37,21 +37,28 @@ public class VendorDetail extends HttpServlet {
 
         String delivered_tablename = getTableName(request);
 
-        JSONArray cateorys = new JSONArray();
+        JSONArray products = new JSONArray();
         String order_tablename = Constant.DataBase_UserTableName.OrderDetail;
         String product_tablename = Constant.DataBase_UserTableName.DBProductdata;
         String stage = payload.get(Constant.UserHistory.stage);
         try {
-//            cateorys = vendorService.getProduct(product_tablename, order_tablename,       //delivery
-//                    payload.get(Constant.UserHistory.stage), userid);
-
-            cateorys = vendorService.getDelivered(delivered_tablename,Constant.UserHistory.stage,stage);
+            Strategy strategy = null;
+            if(payload.get(Constant.UserHistory.stage).equalsIgnoreCase(Constant.VendorStage.ordered)) {
+                strategy = new Delivery();
+                products = strategy.getProduct(product_tablename, order_tablename, payload.get(Constant.UserHistory.stage), userid);
+            } else if (stage.equalsIgnoreCase(Constant.VendorStage.delivered)) {
+                strategy = new Delivered();
+                products = strategy.getProduct(product_tablename, delivered_tablename,Constant.UserHistory.stage,stage);
+            }
+            else {
+                throw new SQLException("does not match");
+            }
         } catch (SQLException e) {
             response.sendError(401, "Unauthorized");
             throw new RuntimeException(e);
         }
         PrintWriter out = response.getWriter();
-        System.out.println(cateorys.toString());
-        out.print(cateorys);
+        System.out.println(products.toString());
+        out.print(products);
     }
 }
