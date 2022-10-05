@@ -34,8 +34,9 @@ function insertintoordertable(data) {
         col5 = newRow.insertCell(5);
         col5.innerHTML = data[i].price;
         col6 = newRow.insertCell(6);
+        col6.innerHTML = data[i].totalprice;
         col7 = newRow.insertCell(7);
-        col7.innerHTML = `<button id="cancel" onClick="">Cancel</button>`;
+        col7.innerHTML = `<button id="cancel" onClick="onCancel(`+ data[i]._id +`)">Cancel</button>`;
    }
    var page =`<div class="dis_amount">
                 <p><b>Total Amount: </b>`+data[data.length-1]+`</p>
@@ -60,6 +61,10 @@ function insertintocarttable(data) {
         col4.innerHTML = `<p contenteditable="true">`+ data[i].quantity +`</p>`;
         col5 = newRow.insertCell(5);
         col5.innerHTML = data[i].price;
+        col6 = newRow.insertCell(6);
+        col6.innerHTML = data[i].totalprice;
+        col7 = newRow.insertCell(7);
+        col7.innerHTML = `<button id="cancel" onClick="Cancel(`+ data[i].product_id +`)">Cancel</button>`;
    }
    var page =`<div class="dis_amount">
                 <p><b>Total Amount: </b>`+data[data.length-1]+`</p>
@@ -95,4 +100,22 @@ function getorder() {
             alert("error occurs");
         }
         });
+}
+
+function Cancel(data) {
+	    var payload = {"product_id": data.toString()};
+        $.ajax({
+                url : "customer/delete",
+                method: 'GET',
+                type: "json",
+                data: {"payload" : JSON.stringify(payload)},
+                cache: false,
+                success : function() {
+                    alert("success");
+                    refresh();
+                },
+                error: function(){
+                    alert("error occurs");
+                }
+            });
 }

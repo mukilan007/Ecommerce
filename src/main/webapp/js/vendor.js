@@ -14,22 +14,7 @@ function onDelivered(data) {
             }
         });
 }
-function onCancel(data) {
-	    var payload = {"_id": data};
-        $.ajax({
-                url : "vendor/delete",
-                method: 'GET',
-                type: "json",
-                data: {"payload" : JSON.stringify(payload)},
-                cache: false,
-                success : function() {
-                    alert("success");
-                },
-                error: function(){
-                    alert("error occurs");
-                }
-            });
-}
+
 function insertintodeliverytable(data) {
     console.log(data);
     for (let i = 0; i < data.length; i++) {

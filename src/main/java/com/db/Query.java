@@ -56,7 +56,7 @@ public class Query {
                 " ON "+ table_name1 +"."+ Constant.DataBase_Gobal_Products.productid +"=" +
                 table_name2 +"."+ Constant.OrderDetail.productid +
                 " WHERE"+ condition ;
-        System.out.println("findcart  " + find);
+        System.out.println("findorder  " + find);
         return find;
     }
     public static String findcart(String table_name1, String table_name2, String condition) {
@@ -70,11 +70,13 @@ public class Query {
                 table_name2 +"."+ Constant.OrderDetail.quantity+ "," +
                 table_name1 +"."+ Constant.DataBase_Gobal_Products.price+
                 " FROM "+ table_name1 +" INNER JOIN "+ table_name2 +
-                " ON "+ table_name1 +"."+ Constant.DataBase_Gobal_Products.productid +"=" +
+                " ON "+ table_name1 +"."+ Constant.DataBase_Gobal_Products.productid +" = " +
                 table_name2 +"."+ Constant.OrderDetail.productid +
                 " WHERE"+ condition ;
         System.out.println("findcart  " + find);
         return find;
+//        table_name2 +"."+ Constant.OrderDetail.productid +" AND " +
+//                Constant.OrderDetail.customerid +" = " +user_id+
     }
 
     public static String queryAddUser(String table_name, Map<String, String> payload){
@@ -83,7 +85,7 @@ public class Query {
                     "created_at,last_check_in,is_deleted) values(?,?,?,?,?,?,?,?,?,?);";
             preparedStatement = connection.prepareStatement(add);
             preparedStatement.setString(1, payload.get(Constant.Usersdata.name));
-            preparedStatement.setString(2, payload.get(Constant.Usersdata.password));
+            preparedStatement.setString(2, payload.get("encrypt-password"));
             preparedStatement.setString(3, payload.get(Constant.Usersdata.dateofbirth));
             preparedStatement.setString(4, payload.get(Constant.Usersdata.email));
             preparedStatement.setString(5, payload.get(Constant.Usersdata.address));
@@ -119,12 +121,13 @@ public class Query {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+        System.out.println("AddProduct => "+ String.valueOf(preparedStatement));
         return String.valueOf(preparedStatement);
     }
 
     public static String queryAddCateory(String table_name,  String payload) {
         try {
-            String add = "insert into "+table_name+" (cateory_name) values (?);";
+            String add = "insert into "+table_name+" (cateory_name) values (lower(?));";
             preparedStatement = connection.prepareStatement(add);
             preparedStatement.setString(1, payload);
         } catch (SQLException e) {
@@ -166,6 +169,22 @@ public class Query {
         System.out.println("queryAddOrder  " + String.valueOf(preparedStatement));
         preparedStatement.executeBatch();
     }
+    public static void updateorder(String cart_tablename, String order_tablename, ResultSet payload) throws SQLException {
+        String update  = "UPDATE " +
+                order_tablename +" SET " +
+                Constant.DataBase_Gobal_Products.quantity +" = " +
+                order_tablename +"."+ Constant.DataBase_Gobal_Products.quantity +" - ? FROM " +
+                cart_tablename +" WHERE " +
+                cart_tablename +"."+ Constant.UserHistory.productid +" = " +
+                order_tablename +"."+ Constant.OrderDetail.productid +";";
+        preparedStatement = connection.prepareStatement(update);
+        while(payload.next()) {
+            preparedStatement.setInt(1, Integer.parseInt(payload.getString(Constant.OrderDetail.quantity)));
+            preparedStatement.addBatch();
+        }
+        System.out.println("updateorder  " + String.valueOf(preparedStatement));
+        preparedStatement.executeBatch();
+    }
     public static String queryAddOrder_history(String table_name, ResultSet payload, String completedAt,
                                                String stage) throws SQLException {
         String add = "insert into "+table_name+
@@ -184,11 +203,11 @@ public class Query {
         return (String.valueOf(preparedStatement));
     }
 
-    public static String update(String table_name, String stage) {
+    public static String update(String table_name,String set, String condition) {
         try {
             String update = "update "+ table_name +" set " +
-                    Constant.UserHistory.stage+" = '" +stage+ "' WHERE " +
-                    Constant.UserHistory.stage+" = 'cart'";
+                    set +"' where" +
+                    condition;
             preparedStatement = connection.prepareStatement(update);
         } catch (SQLException e) {
             e.printStackTrace();

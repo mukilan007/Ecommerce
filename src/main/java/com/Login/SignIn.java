@@ -16,7 +16,6 @@ import javax.servlet.http.HttpSession;
 
 @WebServlet("/login")
 public class SignIn extends HttpServlet {
-//    private static final long serialVersionUID = 1L;
     public SignIn() {super();}
     protected LoginService loginService = new LoginService();
 
@@ -28,7 +27,7 @@ public class SignIn extends HttpServlet {
             if(payload == null || !(loginService.SignIn(request, payload)))
                 response.sendError(401, "Unauthorized");
             else {
-                HttpSession session = request.getSession();
+                HttpSession session = request.getSession(false);
                 String name = (String) session.getAttribute(Constant.Usersdata.name);
                 String type = (String) session.getAttribute(Constant.Usersdata.isadmin);
                 PrintWriter out = response.getWriter();
@@ -59,7 +58,7 @@ public class SignIn extends HttpServlet {
                 String type = (String) session.getAttribute(Constant.Usersdata.isadmin);
                 PrintWriter out = response.getWriter();
                 if (type.equals("t"))
-                    out.printf("isadmin", name);        //TODO: need to need two parameter to js
+                    out.printf("isadmin", name);
                 else
                     out.printf("notadmin", name);
             }

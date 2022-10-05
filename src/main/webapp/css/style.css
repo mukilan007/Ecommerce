@@ -3,7 +3,10 @@ label {
         padding-top: 10px;
         padding-bottom: 2px;
 }
-
+body {
+    background: -webkit-linear-gradient(to right, #3f4c6b, #606c88);
+    background: linear-gradient(to right, #3f4c6b, #606c88);
+}
 input {
         height: 20px;
 }

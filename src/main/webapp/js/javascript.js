@@ -99,7 +99,7 @@
 
 function errorMessage() {
     var error = document.getElementById("error")
-    error.textContent = "Please enter a correct valid"
+    error.textContent = "Please enter a correct value"
     error.style.color = "red"
 }
 
@@ -109,7 +109,6 @@ function myFunction() {
     x.className = "show";
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 }
-
 
 function getUser() {
     document.getElementById("error").value = "";
@@ -130,7 +129,8 @@ function getUser() {
             alert("Welcome " +  name);
             myFunction();
         },
-        error: function(a, msg){            //TODO: use this field a and msg
+        error: function(a, msg){
+            alert(msg);
             errorMessage();
         }
     });
@@ -145,6 +145,7 @@ function setUser(){
     var address = document.getElementById("address").value;
     var phone = document.getElementById("phone").value;
     var admin = document.getElementById("admin").checked;
+    console.log(admin);
     if(password == cpassword) {
         var payload = {"name": name,
                         "e_mail": emailId,
@@ -174,6 +175,8 @@ function setUser(){
                 alert("Account not created, Try again.")
             }
         });
+    }else {
+        errorMessage();
     }
 }
 

@@ -16,7 +16,7 @@ import java.sql.SQLException;
 @WebServlet("/cart/order")
 public class CartOrder extends HttpServlet {
     private String getUserID(HttpServletRequest req) {
-        HttpSession session = req.getSession();
+        HttpSession session = req.getSession(false);
         return String.valueOf(session.getAttribute(Constant.Usersdata.userid));
     }
     private String getTableName(HttpServletRequest req){
@@ -27,10 +27,16 @@ public class CartOrder extends HttpServlet {
             throws ServletException, IOException {
         JSONArray jsoncart = null;
         String stage = Constant.VendorStage.ordered;
+        HttpSession session = request.getSession(false);
+        String userid = getUserID(request);
         try {
-            jsoncart = new CustomerService().findcard(Constant.DataBase_UserTableName.DBProductdata,
-                    Constant.DataBase_UserTableName.OrderDetail, stage);
+            jsoncart = new CustomerService(session).findorder(Constant.DataBase_UserTableName.DBProductdata,
+                    Constant.DataBase_UserTableName.OrderDetail, stage, userid);
         } catch (SQLException e) {
+            response.sendError(401, "SQL Error");
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (SessionException e) {
             response.sendError(401, "Unauthorized");
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -42,10 +48,15 @@ public class CartOrder extends HttpServlet {
             throws ServletException, IOException {
         String cart_tablename = getTableName(request);
         String userid = getUserID(request);
+        HttpSession session = request.getSession(false);
         try {
-            new CustomerService().updatecart(cart_tablename, Constant.DataBase_UserTableName.OrderDetail,
+            new CustomerService(session).updatecart(cart_tablename, Constant.DataBase_UserTableName.OrderDetail,
                     Constant.VendorStage.ordered, userid);
         } catch (SQLException e) {
+            response.sendError(401, "SQL Error");
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (SessionException e) {
             response.sendError(401, "Unauthorized");
             e.printStackTrace();
             throw new RuntimeException(e);

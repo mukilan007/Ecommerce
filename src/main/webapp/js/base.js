@@ -6,8 +6,27 @@ function logout(){
     $.ajax({
             url : "logout",
             method : 'GET',
-            success: function(){
+            success: function(name){
                 window.location.href = "/Eco";
             }
+            });
+}
+
+
+function onCancel(data) {
+	    var payload = {"_id": data.toString()};
+        $.ajax({
+                url : "vendor/delete",
+                method: 'GET',
+                type: "json",
+                data: {"payload" : JSON.stringify(payload)},
+                cache: false,
+                success : function() {
+                    alert("success");
+                    refresh();
+                },
+                error: function(){
+                    alert("error occurs");
+                }
             });
 }

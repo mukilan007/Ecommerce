@@ -22,7 +22,7 @@ public class Validation {
 
     public void checkCateory() throws SQLException {
         List<String> list = new ArrayList<String>();
-        String condition = " "+ Constant.AllCateory.cateoryname +" = '"+ cateoryname +"';";
+        String condition = " "+ Constant.AllCateory.cateoryname +" = LOWER('"+ cateoryname +"');";
         ResultSet resultdata = rest.executeQuery(Query.find(Constant.DataBase_UserTableName.Cateorydata, condition));
         try {
             while(resultdata.next()){

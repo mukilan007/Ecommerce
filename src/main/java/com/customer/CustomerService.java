@@ -13,17 +13,27 @@ import com.util.ResultSettoJSON;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import javax.servlet.http.HttpSession;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 
 public class CustomerService{
     private RESTOperation rest = null;
-
-    public CustomerService() {
+    private CustomerService(){}
+    public CustomerService(HttpSession session) throws SessionException {
+        sessionvalidate(session);
         rest = RESTOperation.getInstance();
     }
-//    public JSONArray getAllCateory(String table_name, getSpecificTable strInstance){
+
+    private void sessionvalidate(HttpSession session) throws SessionException {
+        if (session == null)
+        {
+            throw new SessionException("Sign in");
+        }
+    }
+
+    //    public JSONArray getAllCateory(String table_name, getSpecificTable strInstance){
 //        ResultSet resultdata = rest.find(Query.findall(table_name));
 //        JSONArray cateoryslist = strInstance.ResultSettoJSON(resultdata);
 ////        System.out.println(cateoryslist.toString());
@@ -75,20 +85,36 @@ public class CustomerService{
             rest.createTable(Query.CreateUserHistoryTable(tablename));
         }
     }
-    public void addcart(String tablename, Map<String, String> payload) throws SQLException {
-        checkUserHistoryTable(tablename);
-        Accountmanagement accountmanagement = new Accountmanagement();
-        payload.put(Constant.UserHistory.quantity, "1");
-        payload.put(Constant.UserHistory.stage, Constant.CustomerStage.cart);
-        payload.put(Constant.UserHistory.createdAt, String.valueOf(accountmanagement.getCreatedAt()));
-        payload.put(Constant.UserHistory.completedAt, null);
+    public void addcart(String tablename, Map<String, String> payload) throws SQLException, CardExistException {
+        String condition = " "+ Constant.UserHistory.productid +" = '"+ payload.get(Constant.UserHistory.productid) +"';";
+        ResultSet resultdata = rest.executeQuery(Query.find(tablename, condition));
+        if (!resultdata.next()) {
+            checkUserHistoryTable(tablename);
+            Accountmanagement accountmanagement = new Accountmanagement();
+            payload.put(Constant.UserHistory.quantity, "1");
+            payload.put(Constant.UserHistory.stage, Constant.CustomerStage.cart);
+            payload.put(Constant.UserHistory.createdAt, String.valueOf(accountmanagement.getCreatedAt()));
+            payload.put(Constant.UserHistory.completedAt, null);
 
-        rest.executeUpdate(Query.queryAddCart(tablename, payload));
+            rest.executeUpdate(Query.queryAddCart(tablename, payload));
+        }
+        else {
+            throw new CardExistException("cart already exist");
+        }
     }
-
+    public JSONArray findorder(String table_name1, String table_name2, String stage, String userid) throws SQLException {
+        checkUserHistoryTable(table_name2);
+        String condition =  " "+ Constant.UserHistory.stage +" = '"+ stage +"' and "+
+                Constant.OrderDetail.customerid+" = '"+ userid +"';";
+        ResultSet resultdata = rest.executeQuery(Query.findorder(table_name1, table_name2, condition));
+        return new ResultSettoJSON().ProductTable(resultdata, stage);
+    }
     public JSONArray findcard(String table_name1, String table_name2, String stage) throws SQLException {
         checkUserHistoryTable(table_name2);
         String condition = " "+ Constant.UserHistory.stage +" = '"+ stage +"';";
+        return getcard(table_name1, table_name2, condition);
+    }
+    private JSONArray getcard(String table_name1, String table_name2, String condition) throws SQLException {
         ResultSet resultdata = rest.executeQuery(Query.findcart(table_name1, table_name2, condition));
         int size = 0;
         if (resultdata.last()) {
@@ -143,13 +169,23 @@ public class CustomerService{
         }
         notification.dataChange();
     }
+    public void decreaseProduct(String cart_tablename, String order_tablename, ResultSet resultdata) throws SQLException {
+        Query.updateorder(cart_tablename, order_tablename, resultdata);
+    }
     public void updatecart(String cart_tablename, String order_tablename, String stage, String userid) throws SQLException{
         String condition = " "+ Constant.UserHistory.stage +" = '"+ Constant.CustomerStage.cart +"';";
         ResultSet resultdata = rest.executeQuery(Query.find(cart_tablename, condition));
         Query.queryAddOrder(order_tablename, userid, stage, resultdata);
+        resultdata.beforeFirst();
+//        decreaseProduct(cart_tablename, order_tablename, resultdata);
+//        resultdata.beforeFirst();
         rest.executeUpdate(Query.delete(cart_tablename,
                 Constant.UserHistory.stage,Constant.CustomerStage.cart));
 
-//        sendNotifcation(resultdata);
+        sendNotifcation(resultdata);
+    }
+
+    public void deleteProduct(String tablename, String orderid) throws SQLException {
+        rest.executeUpdate(Query.delete(tablename,Constant.UserHistory.productid,orderid));
     }
 }

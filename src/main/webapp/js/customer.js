@@ -11,8 +11,16 @@ function addcart(productid, vendorid){
         success: function(){
             alert("added to cart");
         },
-        error: function(){
-            alert("not added to cart");
+        error: function(sc, msg){
+            alert(sc.status);
+            switch(sc.status) {
+                case "409":
+                    alert("cart already exist");
+                    break;
+                default:
+                    alert("not added to cart");
+                    break;
+            }
         }
         });
 }

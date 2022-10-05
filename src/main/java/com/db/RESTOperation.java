@@ -66,7 +66,7 @@ public class RESTOperation extends Query{
             e.printStackTrace();
             System.out.println(e);
         }
-        System.out.println("inserted success");
+        System.out.println("Operation Success");
     }
 
     public ResultSet executeQuery(String Query){
