@@ -1,7 +1,5 @@
 package com.vendor;
 
-
-
 import com.Constant;
 import org.json.simple.JSONArray;
 
@@ -33,15 +31,15 @@ public class VendorView extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        JSONArray cateorys = new JSONArray();
+        JSONArray categorys = new JSONArray();
         try {
-            cateorys = vendorService.getCateory(getUserId(request));
+            categorys = vendorService.getCategory(getUserId(request));
         } catch (SQLException e) {
             response.sendError(401, "Unauthorized");
             throw new RuntimeException(e);
         }
-        System.out.println(cateorys.toString());
+        System.out.println(categorys.toString());
         PrintWriter out = response.getWriter();
-        out.print(cateorys);
+        out.print(categorys);
     }
 }

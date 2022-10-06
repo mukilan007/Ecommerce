@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ResultSettoJSON {
-
     public JSONArray ProductTable(ResultSet resultdata, String type) throws SQLException {
         JSONArray productjson = new JSONArray();
         while(resultdata.next()){
@@ -37,16 +36,16 @@ public class ResultSettoJSON {
         }
         return productjson;
     }
-    public JSONArray TableListOfCateory(ResultSet resultdata) throws SQLException {
-        JSONArray cateoryslist = new JSONArray();
+    public JSONArray TableListOfCategory(ResultSet resultdata) throws SQLException {
+        JSONArray categoryslist = new JSONArray();
         while(resultdata.next()){
-            JSONObject cateorydetails =new JSONObject();
-            cateorydetails.put(Constant.AllCateory.cateoryid,
-                    resultdata.getString(Constant.AllCateory.cateoryid));
-            cateorydetails.put(Constant.AllCateory.cateoryname,
-                    resultdata.getString(Constant.AllCateory.cateoryname));
-            cateoryslist.add(cateorydetails);
+            JSONObject categorydetails =new JSONObject();
+            categorydetails.put(Constant.AllCategory.categoryid,
+                    resultdata.getString(Constant.AllCategory.categoryid));
+            categorydetails.put(Constant.AllCategory.categoryname,
+                    resultdata.getString(Constant.AllCategory.categoryname));
+            categoryslist.add(categorydetails);
         }
-        return cateoryslist;
+        return categoryslist;
     }
 }

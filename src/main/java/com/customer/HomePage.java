@@ -1,6 +1,5 @@
 package com.customer;
 
-import com.Constant;
 import org.json.simple.JSONArray;
 
 import javax.servlet.ServletException;
@@ -17,13 +16,13 @@ import java.sql.SQLException;
 public class HomePage extends HttpServlet{
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        JSONArray cateorys = new JSONArray();
+        JSONArray categorys = new JSONArray();
         HttpSession session = request.getSession(false);
         try {
-            cateorys = new CustomerService(session).getAllCateory();
-            System.out.println(cateorys.toString());
+            categorys = new CustomerService(session).getAllCategory();
+            System.out.println(categorys.toString());
             PrintWriter out = response.getWriter();
-            out.print(cateorys);
+            out.print(categorys);
         } catch (SQLException e) {
             response.sendError(401, "SQL Error");
             e.printStackTrace();

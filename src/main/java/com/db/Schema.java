@@ -26,10 +26,10 @@ public class Schema {
                 ");";
     }
 
-    public String createListOfCateory() {
+    public String createListOfCategory() {
         return "create table "+table_name+" (" +
-                Constant.AllCateory.cateoryid+" serial NOT NULL, " +
-                Constant.AllCateory.cateoryname+" VARCHAR(100) NOT NULL PRIMARY KEY" +
+                Constant.AllCategory.categoryid +" serial NOT NULL, " +
+                Constant.AllCategory.categoryname +" VARCHAR(100) NOT NULL PRIMARY KEY" +
                 ");";
     }
 

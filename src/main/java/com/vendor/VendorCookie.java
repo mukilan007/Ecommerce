@@ -2,8 +2,6 @@ package com.vendor;
 
 
 import com.Constant;
-import com.Login.LoginService;
-import com.customer.CustomerService;
 import com.util.vendorSetCookie;
 import org.json.simple.JSONArray;
 import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.base64.Base64;
@@ -12,8 +10,6 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Arrays;
 
 @WebServlet("/vendorcookies")
 public class VendorCookie extends HttpServlet {
@@ -23,14 +19,14 @@ public class VendorCookie extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
 
-        JSONArray cateorys = new JSONArray();
+        JSONArray categorys = new JSONArray();
         try {
-            cateorys = vendorService.getAllCateory((String) session.getAttribute(Constant.Usersdata.userid));
+            categorys = vendorService.getAllCategory((String) session.getAttribute(Constant.Usersdata.userid));
         } catch (Throwable e) {
             response.sendError(401, "Unauthorized");
             throw new RuntimeException(e);
         }
-        new vendorSetCookie().setcookie(response, cateorys);
+        new vendorSetCookie().setcookie(response, categorys);
         System.out.println("cookie added");
         Cookie[] cookie1 = request.getCookies();
         String str = null;

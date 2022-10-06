@@ -49,7 +49,3 @@ body{
 label{
     margin-bottom: inherit;
 }
-#cartlist button:hover {
-      background-color: #04AA6D;
-      color: white;
-}

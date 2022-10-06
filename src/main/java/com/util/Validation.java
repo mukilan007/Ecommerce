@@ -11,29 +11,29 @@ import java.util.List;
 
 public class Validation {
     private static RESTOperation rest = null;
-    private String cateoryname;
+    private String categoryname;
     public Validation(){
         rest = RESTOperation.getInstance();
     }
 
-    public void setCateoryname(String cateoryname) {
-        this.cateoryname = cateoryname;
+    public void setCategoryname(String categoryname) {
+        this.categoryname = categoryname;
     }
 
-    public void checkCateory() throws SQLException {
+    public void checkCategory() throws SQLException {
         List<String> list = new ArrayList<String>();
-        String condition = " "+ Constant.AllCateory.cateoryname +" = LOWER('"+ cateoryname +"');";
-        ResultSet resultdata = rest.executeQuery(Query.find(Constant.DataBase_UserTableName.Cateorydata, condition));
+        String condition = " "+ Constant.AllCategory.categoryname +" = LOWER('"+ categoryname +"');";
+        ResultSet resultdata = rest.executeQuery(Query.find(Constant.DataBase_UserTableName.Categorydata, condition));
         try {
             while(resultdata.next()){
-                list.add(resultdata.getString(Constant.AllCateory.cateoryname));
+                list.add(resultdata.getString(Constant.AllCategory.categoryname));
             }
         }catch (Exception e){
             e.printStackTrace();
             System.out.println(e);
         }
         if (list.size() == 0)
-            rest.executeUpdate(Query.queryAddCateory(Constant.DataBase_UserTableName.Cateorydata, cateoryname));
+            rest.executeUpdate(Query.queryAddCategory(Constant.DataBase_UserTableName.Categorydata, categoryname));
     }
 
 }

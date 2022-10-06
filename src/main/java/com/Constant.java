@@ -19,7 +19,7 @@ public class Constant {
     public static class DataBase_UserTableName {
         public static final String DBUserdata = "usersdata";
         public static final String DBProductdata = "globalproductsdata";
-        public static final String Cateorydata = "list_of_cateory";
+        public static final String Categorydata = "list_of_cateory";
         public static final String OrderDetail = "order_detail";
     }
     public static class Usersdata {
@@ -48,9 +48,9 @@ public class Constant {
         public static final String categoryname = "category_name";
         public static final String type = "type";
     }
-    public static class AllCateory {
-        public static final String cateoryid = "cateory_id";
-        public static final String cateoryname = "cateory_name";
+    public static class AllCategory {
+        public static final String categoryid = "cateory_id";
+        public static final String categoryname = "cateory_name";
     }
     public static class UserHistory {
         public static final String productid = "product_id";

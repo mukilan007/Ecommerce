@@ -25,9 +25,9 @@ function addcart(productid, vendorid){
         });
 }
 function findcateory(){
-//    var cateory_name = document.getElementById("cardbtn").value;
-    var cateory_name = sessionStorage.getItem("catname")
-    var payload = {"cateory_name": cateory_name};
+//    var category_name = document.getElementById("cardbtn").value;
+    var category_name = sessionStorage.getItem("catname")
+    var payload = {"cateory_name": category_name};
        $.ajax({
             url: "view/product",
             method: "GET",

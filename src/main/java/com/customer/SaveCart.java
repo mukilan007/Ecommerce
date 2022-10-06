@@ -1,7 +1,7 @@
 package com.customer;
 
+import com.Constant;
 import com.base.BaseClass;
-import org.json.simple.JSONArray;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,20 +10,29 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.Map;
 
-@WebServlet("/view/product")
-public class ViewProduct extends HttpServlet {
+@WebServlet("/save/cart")
+public class SaveCart extends HttpServlet {
+    private String getUserID(HttpServletRequest req) {
+        HttpSession session = req.getSession(false);
+        return String.valueOf(session.getAttribute(Constant.Usersdata.userid));
+    }
+    private String getTableName(HttpServletRequest req){
+        return "orderhistory" + getUserID(req);
+    }
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Map<String, String> payload = new BaseClass().getPayload(request);
-        PrintWriter out = response.getWriter();
-        HttpSession session = request.getSession(false);
+//        BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
+//        String payload = br.readLine();
 
+        String tablename = getTableName(request);
+
+        HttpSession session = request.getSession(false);
         try {
-            out.print(new CustomerService(session).findproduct(payload));
+            new CustomerService(session).updatecartquantity(tablename,payload);
         } catch (SQLException e) {
             response.sendError(401, "SQL Error");
             e.printStackTrace();
@@ -33,9 +42,5 @@ public class ViewProduct extends HttpServlet {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-//        System.out.println(categorys.toString());
-
-
-//        out.print(categorys);
     }
 }

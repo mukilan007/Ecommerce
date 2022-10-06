@@ -10,6 +10,7 @@ import com.notification.SMSnotification;
 import com.util.Accountmanagement;
 
 import com.util.ResultSettoJSON;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -33,51 +34,51 @@ public class CustomerService{
         }
     }
 
-    //    public JSONArray getAllCateory(String table_name, getSpecificTable strInstance){
+    //    public JSONArray getAllCategory(String table_name, getSpecificTable strInstance){
 //        ResultSet resultdata = rest.find(Query.findall(table_name));
-//        JSONArray cateoryslist = strInstance.ResultSettoJSON(resultdata);
-////        System.out.println(cateoryslist.toString());
-//        return cateoryslist;
+//        JSONArray categoryslist = strInstance.ResultSettoJSON(resultdata);
+////        System.out.println(categoryslist.toString());
+//        return categoryslist;
 //      }
-    public JSONArray getAllCateory() throws SQLException {
-        ResultSet resultdata = rest.executeQuery(Query.findall(Constant.DataBase_UserTableName.Cateorydata));
-        return new ResultSettoJSON().TableListOfCateory(resultdata);
+    public JSONArray getAllCategory() throws SQLException {
+        ResultSet resultdata = rest.executeQuery(Query.findall(Constant.DataBase_UserTableName.Categorydata));
+        return new ResultSettoJSON().TableListOfCategory(resultdata);
     }
 
 
     public JSONArray findproduct(Map<String, String> payload) throws SQLException {
         String condition = " "+ Constant.DataBase_Gobal_Products.categoryname +" = '"+
-                payload.get(Constant.AllCateory.cateoryname) +"';";
+                payload.get(Constant.AllCategory.categoryname) +"';";
         ResultSet resultdata = rest.executeQuery(Query.find(Constant.DataBase_UserTableName.DBProductdata, condition));
-        JSONArray cateoryslist = new JSONArray();
+        JSONArray categoryslist = new JSONArray();
         while(resultdata.next()){
-            JSONObject cateorydetails =new JSONObject();
-            cateorydetails.put(Constant.DataBase_Gobal_Products.productid,
+            JSONObject categorydetails =new JSONObject();
+            categorydetails.put(Constant.DataBase_Gobal_Products.productid,
                     resultdata.getString(Constant.DataBase_Gobal_Products.productid));
-            cateorydetails.put(Constant.DataBase_Gobal_Products.vendorid,
+            categorydetails.put(Constant.DataBase_Gobal_Products.vendorid,
                     resultdata.getString(Constant.DataBase_Gobal_Products.vendorid));
-            cateorydetails.put(Constant.DataBase_Gobal_Products.product_name,
+            categorydetails.put(Constant.DataBase_Gobal_Products.product_name,
                     resultdata.getString(Constant.DataBase_Gobal_Products.product_name));
-            cateorydetails.put(Constant.DataBase_Gobal_Products.categoryname,
+            categorydetails.put(Constant.DataBase_Gobal_Products.categoryname,
                     resultdata.getString(Constant.DataBase_Gobal_Products.categoryname));
-            cateorydetails.put(Constant.DataBase_Gobal_Products.detail,
+            categorydetails.put(Constant.DataBase_Gobal_Products.detail,
                     resultdata.getString(Constant.DataBase_Gobal_Products.detail));
-            cateorydetails.put(Constant.DataBase_Gobal_Products.quantity,
+            categorydetails.put(Constant.DataBase_Gobal_Products.quantity,
                     resultdata.getString(Constant.DataBase_Gobal_Products.quantity));
-            cateorydetails.put(Constant.DataBase_Gobal_Products.size,
+            categorydetails.put(Constant.DataBase_Gobal_Products.size,
                     resultdata.getString(Constant.DataBase_Gobal_Products.size));
-            cateorydetails.put(Constant.DataBase_Gobal_Products.color,
+            categorydetails.put(Constant.DataBase_Gobal_Products.color,
                     resultdata.getString(Constant.DataBase_Gobal_Products.color));
-            cateorydetails.put(Constant.DataBase_Gobal_Products.brand_name,
+            categorydetails.put(Constant.DataBase_Gobal_Products.brand_name,
                     resultdata.getString(Constant.DataBase_Gobal_Products.brand_name));
-            cateorydetails.put(Constant.DataBase_Gobal_Products.price,
+            categorydetails.put(Constant.DataBase_Gobal_Products.price,
                     resultdata.getString(Constant.DataBase_Gobal_Products.price));
-            cateorydetails.put(Constant.DataBase_Gobal_Products.type,
+            categorydetails.put(Constant.DataBase_Gobal_Products.type,
                     resultdata.getString(Constant.DataBase_Gobal_Products.type));
 
-            cateoryslist.add(cateorydetails);
+            categoryslist.add(categorydetails);
         }
-        return cateoryslist;
+        return categoryslist;
 
     }
     public void checkUserHistoryTable(String tablename){
@@ -184,7 +185,11 @@ public class CustomerService{
 
         sendNotifcation(resultdata);
     }
-
+    public void updatecartquantity(String tablename, Map<String, String> payload) throws SQLException{
+        String condition = " " + Constant.UserHistory.productid + " = '" + payload.get(Constant.UserHistory.productid) + "';";
+        String set = Constant.UserHistory.quantity + " = '" + payload.get(Constant.UserHistory.quantity);
+        rest.executeUpdate(Query.update(tablename, set, condition));
+    }
     public void deleteProduct(String tablename, String orderid) throws SQLException {
         rest.executeUpdate(Query.delete(tablename,Constant.UserHistory.productid,orderid));
     }

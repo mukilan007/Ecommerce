@@ -17,7 +17,7 @@ function generateorder() {
 }
 function insertintoordertable(data) {
     console.log(data);
-    for (let i = 0; i < data.length-1; i++) {
+    for (let i = 0; i < data.length; i++) {
 //        totalprice = totalprice + (data[i].quantity * data[i].price);
         var table = document.getElementById("cartlist").getElementsByTagName('tbody')[0];
         var newRow = table.insertRow(table.length);
@@ -34,7 +34,7 @@ function insertintoordertable(data) {
         col5 = newRow.insertCell(5);
         col5.innerHTML = data[i].price;
         col6 = newRow.insertCell(6);
-        col6.innerHTML = data[i].totalprice;
+        col6.innerHTML = data[i].price * data[i].quantity;
         col7 = newRow.insertCell(7);
         col7.innerHTML = `<button id="cancel" onClick="onCancel(`+ data[i]._id +`)">Cancel</button>`;
    }
@@ -58,13 +58,14 @@ function insertintocarttable(data) {
         col3 = newRow.insertCell(3);
         col3.innerHTML = data[i].size;
         col4 = newRow.insertCell(4);
-        col4.innerHTML = `<p contenteditable="true">`+ data[i].quantity +`</p>`;
+        col4.innerHTML = `<p id="tbodyquantity" onChange="" contenteditable="true">`+ data[i].quantity +`</p>`;
         col5 = newRow.insertCell(5);
         col5.innerHTML = data[i].price;
         col6 = newRow.insertCell(6);
         col6.innerHTML = data[i].totalprice;
         col7 = newRow.insertCell(7);
-        col7.innerHTML = `<button id="cancel" onClick="Cancel(`+ data[i].product_id +`)">Cancel</button>`;
+        col7.innerHTML = `<button onClick="quantity_save('`+ data[i].product_id +`')">Save</button>
+                        <button id="cancel" onClick="Cancel(`+ data[i].product_id +`)">Cancel</button>`;
    }
    var page =`<div class="dis_amount">
                 <p><b>Total Amount: </b>`+data[data.length-1]+`</p>
@@ -103,19 +104,39 @@ function getorder() {
 }
 
 function Cancel(data) {
-	    var payload = {"product_id": data.toString()};
-        $.ajax({
-                url : "customer/delete",
-                method: 'GET',
-                type: "json",
-                data: {"payload" : JSON.stringify(payload)},
-                cache: false,
-                success : function() {
-                    alert("success");
-                    refresh();
-                },
-                error: function(){
-                    alert("error occurs");
-                }
-            });
+    var payload = {"product_id": data.toString()};
+    $.ajax({
+            url : "customer/delete",
+            method: 'GET',
+            type: "json",
+            data: {"payload" : JSON.stringify(payload)},
+            cache: false,
+            success : function() {
+                alert("success");
+                refresh();
+            },
+            error: function(){
+                alert("error occurs");
+            }
+        });
+}
+function quantity_save(product_id) {
+    var quantity = document.getElementById("tbodyquantity").innerHTML;
+    var payload = {"product_id": product_id,
+                    "quantity": quantity}
+    alert(payload.product_id+" "+payload.quantity);
+    $.ajax({
+            url : "save/cart",
+            method: 'GET',
+            type: 'json',
+            data: {"payload" : JSON.stringify(payload)},
+            cache: false,
+            success : function() {
+                alert("success");
+                refresh();
+            },
+            error: function(){
+                alert("error occurs");
+            }
+        });
 }

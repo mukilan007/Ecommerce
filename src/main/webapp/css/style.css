@@ -128,3 +128,7 @@ th {
     background-color: #F75C3C;
     border-radius: 14px;
 }
+#cartlist button:hover {
+      background-color: #04AA6D;
+      color: white;
+}

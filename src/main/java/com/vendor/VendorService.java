@@ -18,19 +18,19 @@ public class VendorService {
         rest = RESTOperation.getInstance();
     }
 
-    public JSONArray getAllCateory(String userid) throws SQLException {
+    public JSONArray getAllCategory(String userid) throws SQLException {
         String condition = " "+ Constant.DataBase_Gobal_Products.vendorid +" = '"+ userid +"';";
         ResultSet resultdata = rest.executeQuery(Query.find(Constant.DataBase_UserTableName.DBProductdata, condition));
-        JSONArray cateoryslist = new JSONArray();
+        JSONArray categoryslist = new JSONArray();
         while(resultdata.next()){
-            JSONObject cateorydetails =new JSONObject();
-            cateorydetails.put(Constant.DataBase_Gobal_Products.categoryname,
+            JSONObject categorydetails =new JSONObject();
+            categorydetails.put(Constant.DataBase_Gobal_Products.categoryname,
                     resultdata.getString(Constant.DataBase_Gobal_Products.categoryname));
-            cateoryslist.add(cateorydetails);
+            categoryslist.add(categorydetails);
         }
-        return cateoryslist;
+        return categoryslist;
     }
-    public JSONArray getCateory(String userid) throws SQLException {
+    public JSONArray getCategory(String userid) throws SQLException {
         String condition = " "+ Constant.DataBase_Gobal_Products.vendorid +" = '"+ userid +"';";
         ResultSet resultdata = rest.executeQuery(Query.find(Constant.DataBase_UserTableName.DBProductdata, condition));
         JSONArray productjson = new JSONArray();
@@ -58,8 +58,8 @@ public class VendorService {
     }
     public void addProduct(String userid, Map<String, String> payload) throws SQLException {
         Validation validation = new Validation();
-        validation.setCateoryname(payload.get("categoryname"));         //TODO: change categoryname
-        validation.checkCateory();
+        validation.setCategoryname(payload.get("categoryname"));         //TODO: change categoryname
+        validation.checkCategory();
 
         rest.executeUpdate(Query.queryAddProduct(Constant.DataBase_UserTableName.DBProductdata,
                 userid,payload));

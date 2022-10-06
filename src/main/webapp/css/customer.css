@@ -36,3 +36,6 @@
 .dis_amount{
     float: left;
 }
+#tbodyquantity {
+    margin-top: 1rem;
+}

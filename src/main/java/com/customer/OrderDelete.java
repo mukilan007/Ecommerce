@@ -2,7 +2,7 @@ package com.customer;
 
 import com.Constant;
 import com.base.BaseClass;
-import com.vendor.VendorService;
+import com.customer.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

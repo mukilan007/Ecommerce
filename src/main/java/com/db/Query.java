@@ -14,8 +14,8 @@ public class Query {
     }
 
     private static PreparedStatement preparedStatement = null;
-    public static String CreateCateoryTable(String table_name) {
-        return new Schema(table_name).createListOfCateory();
+    public static String CreateCategoryTable(String table_name) {
+        return new Schema(table_name).createListOfCategory();
     }
     public static String CreateUserHistoryTable(String table_name) {
         return new Schema(table_name).createUserHistory();
@@ -125,7 +125,7 @@ public class Query {
         return String.valueOf(preparedStatement);
     }
 
-    public static String queryAddCateory(String table_name,  String payload) {
+    public static String queryAddCategory(String table_name, String payload) {
         try {
             String add = "insert into "+table_name+" (cateory_name) values (lower(?));";
             preparedStatement = connection.prepareStatement(add);

@@ -40,7 +40,7 @@ public class testDBConnection {
 
         //create table
 //        new testCreateTable().createUserTable();
-//        new testCreateTable().createCateory();
+//        new testCreateTable().createCategory();
 //        new testCreateTable().createUserHistory();
         new testCreateTable().createOrderDetail();
 
@@ -50,7 +50,7 @@ public class testDBConnection {
 
         //vendor
 //        new testVendorManipulation().addGlobalProductsData();
-//        new testVendorManipulation().addCateory();
+//        new testVendorManipulation().addCategory();
     }
 }
 class testCreateTable extends testDBConnection{
@@ -58,8 +58,8 @@ class testCreateTable extends testDBConnection{
         rest.createUserTable(Constant.DataBase_UserTableName.DBUserdata);    //table create
     }
 
-    public void createCateory(){
-        rest.createTable(Query.CreateCateoryTable(Constant.DataBase_UserTableName.Cateorydata));
+    public void createCategory(){
+        rest.createTable(Query.CreateCategoryTable(Constant.DataBase_UserTableName.Categorydata));
     }
 
     public void createUserHistory() throws SQLException {
@@ -124,34 +124,34 @@ class testUserManipulation extends testDBConnection{
         String condition = " "+ Constant.UserHistory.stage +" = '"+ stage +"';";
         ResultSet resultdata = rest.executeQuery(Query.findcart(Constant.DataBase_UserTableName.DBProductdata, tablename,
                 condition));
-        JSONArray cateoryslist = new JSONArray();
+        JSONArray categoryslist = new JSONArray();
         try {
             while(resultdata.next()){
-                JSONObject cateorydetails =new JSONObject();
-                cateorydetails.put(Constant.OrderDetail.productid,
+                JSONObject categorydetails =new JSONObject();
+                categorydetails.put(Constant.OrderDetail.productid,
                         resultdata.getString(Constant.OrderDetail.productid));
-                cateorydetails.put(Constant.OrderDetail.vendorid,
+                categorydetails.put(Constant.OrderDetail.vendorid,
                         resultdata.getString(Constant.OrderDetail.vendorid));
-                cateorydetails.put(Constant.DataBase_Gobal_Products.product_name,
+                categorydetails.put(Constant.DataBase_Gobal_Products.product_name,
                         resultdata.getString(Constant.DataBase_Gobal_Products.product_name));
-                cateorydetails.put(Constant.DataBase_Gobal_Products.brand_name,
+                categorydetails.put(Constant.DataBase_Gobal_Products.brand_name,
                         resultdata.getString(Constant.DataBase_Gobal_Products.brand_name));
-                cateorydetails.put(Constant.DataBase_Gobal_Products.color,
+                categorydetails.put(Constant.DataBase_Gobal_Products.color,
                         resultdata.getString(Constant.DataBase_Gobal_Products.color));
-                cateorydetails.put(Constant.DataBase_Gobal_Products.size,
+                categorydetails.put(Constant.DataBase_Gobal_Products.size,
                         resultdata.getString(Constant.DataBase_Gobal_Products.size));
-                cateorydetails.put(Constant.OrderDetail.quantity,
+                categorydetails.put(Constant.OrderDetail.quantity,
                         resultdata.getString(Constant.OrderDetail.quantity));
-                cateorydetails.put(Constant.DataBase_Gobal_Products.price,
+                categorydetails.put(Constant.DataBase_Gobal_Products.price,
                         resultdata.getString(Constant.DataBase_Gobal_Products.price));
-                cateoryslist.add(cateorydetails);
+                categoryslist.add(categorydetails);
             }
         }catch (Exception e){
             e.printStackTrace();
             System.out.println(e);
         }
-        System.out.println(cateoryslist.toString());
-        for(Object i :cateoryslist){
+        System.out.println(categoryslist.toString());
+        for(Object i : categoryslist){
             System.out.println(i);
         }
     }
@@ -176,10 +176,10 @@ class testVendorManipulation extends testDBConnection{
         }
     }
 
-    public void addCateory(){
+    public void addCategory(){
         String payload = "categoryname";
         try {
-            rest.executeUpdate(Query.queryAddCateory(Constant.DataBase_UserTableName.Cateorydata, payload));
+            rest.executeUpdate(Query.queryAddCategory(Constant.DataBase_UserTableName.Categorydata, payload));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
