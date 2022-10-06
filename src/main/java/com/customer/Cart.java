@@ -17,23 +17,27 @@ import java.util.Map;
 
 @WebServlet("/cart")
 public class Cart extends HttpServlet {
-    private String getUserID(HttpServletRequest req) {
+    private String getUserID(HttpServletRequest req) throws SessionException{
         HttpSession session = req.getSession(false);
-        return String.valueOf(session.getAttribute(Constant.Usersdata.userid));
+        try {
+            return String.valueOf(session.getAttribute(Constant.Usersdata.userid));
+        } catch (Exception e) {
+            throw new SessionException("Unauthorized");
+        }
     }
-    private String getTableName(HttpServletRequest req){
+    private String getTableName(HttpServletRequest req) throws SessionException{
         return "orderhistory" + getUserID(req);
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String tablename = getTableName(request);
+        PrintWriter out = response.getWriter();
         String stage = Constant.CustomerStage.cart;
         JSONArray jsoncart = null;
         HttpSession session = request.getSession(false);
-        String userid = getUserID(request);
         try {
+            String tablename = getTableName(request);
             jsoncart = new CustomerService(session).findcard(Constant.DataBase_UserTableName.DBProductdata, tablename,
                     stage);
         } catch (SQLException e) {
@@ -41,21 +45,21 @@ public class Cart extends HttpServlet {
             e.printStackTrace();
             throw new RuntimeException(e);
         } catch (SessionException e) {
-            response.sendError(401, "Unauthorized");
+//            response.sendError(401, "Unauthorized");
+            response.setStatus(400);
+            out.print(e.getMessage());
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-
-        PrintWriter out = response.getWriter();
         out.print(jsoncart);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Map<String, String> payload = new BaseClass().getPayload(request);
-        String tablename = getTableName(request);
         HttpSession session = request.getSession(false);
         try {
+            String tablename = getTableName(request);
             new CustomerService(session).addcart(tablename,payload);
         } catch (SQLException e) {
             response.sendError(401, "SQL Error");

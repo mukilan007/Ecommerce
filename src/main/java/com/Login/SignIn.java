@@ -53,7 +53,7 @@ public class SignIn extends HttpServlet {
                 response.sendError(401, "Unauthorized");
             }
             else{
-                HttpSession session = request.getSession();
+                HttpSession session = request.getSession(false);
                 String name = (String) session.getAttribute(Constant.Usersdata.name);
                 String type = (String) session.getAttribute(Constant.Usersdata.isadmin);
                 PrintWriter out = response.getWriter();

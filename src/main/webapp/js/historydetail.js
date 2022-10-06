@@ -82,8 +82,8 @@ function getcart(data) {
             var product = $.parseJSON(result);
             insertintocarttable(product);
          },
-        error: function(){
-            alert("error occurs");
+        error: function(result){
+            alert(" error occurs "+ result);
         }
         });
 }

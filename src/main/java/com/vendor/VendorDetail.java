@@ -27,7 +27,6 @@ public class VendorDetail extends HttpServlet {
         String userid = String.valueOf(session.getAttribute(Constant.Usersdata.userid));
         return "orderhistory" + userid;
     }
-    protected VendorService vendorService = new VendorService();
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

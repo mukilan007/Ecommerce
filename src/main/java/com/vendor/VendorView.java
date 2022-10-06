@@ -1,6 +1,7 @@
 package com.vendor;
 
 import com.Constant;
+import com.customer.SessionException;
 import org.json.simple.JSONArray;
 
 import javax.servlet.ServletException;
@@ -27,15 +28,19 @@ public class VendorView extends HttpServlet {
         HttpSession session = req.getSession();
         return  (String) session.getAttribute(Constant.Usersdata.userid);
     }
-    protected VendorService vendorService = new VendorService();
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+
         JSONArray categorys = new JSONArray();
         try {
-            categorys = vendorService.getCategory(getUserId(request));
+            categorys = new VendorService(session).getCategory(getUserId(request));
         } catch (SQLException e) {
+            response.sendError(401, "SQL Error");
+            throw new RuntimeException(e);
+        } catch (SessionException e) {
             response.sendError(401, "Unauthorized");
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
         System.out.println(categorys.toString());

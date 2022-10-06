@@ -2,6 +2,7 @@ package com.vendor;
 
 import com.Constant;
 import com.base.BaseClass;
+import com.customer.SessionException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,15 +20,18 @@ public class VendorAdd extends HttpServlet {
         super();
     }
 
-    protected VendorService vendorService = new VendorService();
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Map<String, String> payload = new BaseClass().getPayload(request);
 
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
         try {
-            vendorService.addProduct((String) session.getAttribute(Constant.Usersdata.userid),payload);
+            new VendorService(session).addProduct((String) session.getAttribute(Constant.Usersdata.userid),payload);
         } catch (SQLException e) {
+            response.sendError(401, "SQL Error");
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (SessionException e) {
             response.sendError(401, "Unauthorized");
             e.printStackTrace();
             throw new RuntimeException(e);

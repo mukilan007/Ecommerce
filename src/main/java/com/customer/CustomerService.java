@@ -28,9 +28,11 @@ public class CustomerService{
     }
 
     private void sessionvalidate(HttpSession session) throws SessionException {
-        if (session == null)
-        {
-            throw new SessionException("Sign in");
+        if(session != null) {
+            String type = (String) session.getAttribute(Constant.Usersdata.isadmin);
+            if (type.equals("t")) {
+                throw new SessionException("Unauthorized");
+            }
         }
     }
 

@@ -70,7 +70,7 @@ public class LoginService {
             rest.executeUpdate(Query.queryAddUser(Constant.DataBase_UserTableName.DBUserdata, payload));
 
             if (SignIn(request, payload)) {
-                HttpSession session = request.getSession();
+                HttpSession session = request.getSession(false);
                 String tablename = "orderhistory" + String.valueOf(session.getAttribute(Constant.Usersdata.userid));
                 if (rest.checkTable(tablename)) {
                     rest.createTable(Query.CreateUserHistoryTable(tablename));

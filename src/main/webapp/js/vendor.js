@@ -54,6 +54,8 @@ function insertintotable(data) {
         col4.innerHTML = data[i].quantity;
         col5 = newRow.insertCell(5);
         col5.innerHTML = data[i].price;
+        col6 = newRow.insertCell(6);
+        col6.innerHTML = `<button id="cancel" onClick="onDelete('`+ data[i].product_id +`')">Delete</button>`;
    }
 }
 
@@ -86,7 +88,24 @@ function getvendordeatil(stage) {
                     insertintodeliverytable(product);
                 }
                 else {
-                    insertintotable(product);
+//                    insertintotable(product);
+                    console.log(product);
+                    for (let i = 0; i < product.length; i++) {
+                        var table = document.getElementById("cartlist").getElementsByTagName('tbody')[0];
+                        var newRow = table.insertRow(table.length);
+                        col0 = newRow.insertCell(0);
+                        col0.innerHTML = product[i].product_name;
+                        col1 = newRow.insertCell(1);
+                        col1.innerHTML = product[i].brand_name;
+                        col2 = newRow.insertCell(2);
+                        col2.innerHTML = product[i].color;
+                        col3 = newRow.insertCell(3);
+                        col3.innerHTML = product[i].size;
+                        col4 = newRow.insertCell(4);
+                        col4.innerHTML = product[i].quantity;
+                        col5 = newRow.insertCell(5);
+                        col5.innerHTML = product[i].price;
+                    }
                 }
             },
             error: function(){
@@ -142,6 +161,24 @@ function vendorAdd() {
         error: function(){
             alert("error occur");
         }
+        });
+}
+
+function onDelete(data){
+    var payload = {"product_id": data.toString()};
+    $.ajax({
+            url : "vendor/product/delete",
+            method: 'GET',
+            type: "json",
+            data: {"payload" : JSON.stringify(payload)},
+            cache: false,
+            success : function() {
+                alert("success");
+                refresh();
+            },
+            error: function(){
+                alert("error occurs");
+            }
         });
 }
 const form = document.getElementById("addform");

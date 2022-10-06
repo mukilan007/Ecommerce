@@ -14,27 +14,15 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map;
 
-@WebServlet("/vendor/edit")
-public class VendorUpdate extends HttpServlet {
-    public VendorUpdate(){
-        super();
-    }
-    private String getUserID(HttpServletRequest req) {
-        HttpSession session = req.getSession();
-        return String.valueOf(session.getAttribute(Constant.Usersdata.userid));
-    }
-    private String getTableName(HttpServletRequest req){
-        return "orderhistory" + getUserID(req);
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+@WebServlet("/vendor/product/delete")
+public class ProductDelete extends HttpServlet {
+    @Override
+    protected final void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Map<String, String> payload = new BaseClass().getPayload(request);
         HttpSession session = request.getSession(false);
-
-        String history_tablename = getTableName(request);
         try {
-        new VendorService(session).updateDelivery(history_tablename, payload.get(Constant.OrderDetail.id));
+            new VendorService(session).deleteProduct(payload.get(Constant.DataBase_Gobal_Products.productid));
         } catch (SQLException e) {
             response.sendError(401, "SQL Error");
             e.printStackTrace();

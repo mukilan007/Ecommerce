@@ -1,6 +1,7 @@
 package com.vendor;
 
 import com.Constant;
+import com.customer.SessionException;
 import com.db.Query;
 import com.db.RESTOperation;
 import com.util.*;
@@ -8,14 +9,25 @@ import com.util.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import javax.servlet.http.HttpSession;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 
 public class VendorService {
     private static RESTOperation rest = null;
-    public VendorService(){
+    private VendorService(){}
+    public VendorService(HttpSession session) throws SessionException {
+        sessionvalidate(session);
         rest = RESTOperation.getInstance();
+    }
+    private void sessionvalidate(HttpSession session) throws SessionException {
+        if(session != null) {
+            String type = (String) session.getAttribute(Constant.Usersdata.isadmin);
+            if (type.equals("f")) {
+                throw new SessionException("Unauthorized");
+            }
+        }
     }
 
     public JSONArray getAllCategory(String userid) throws SQLException {
@@ -65,7 +77,7 @@ public class VendorService {
                 userid,payload));
     }
 
-    public void deleteProduct(String orderid) throws SQLException {
+    public void deleteOrder(String orderid) throws SQLException {
         String order_tablename = Constant.DataBase_UserTableName.OrderDetail;
         rest.executeUpdate(Query.delete(order_tablename,Constant.OrderDetail.id,orderid));
     }
@@ -79,8 +91,12 @@ public class VendorService {
 
         ResultSet resultdata = rest.executeQuery(Query.find(order_tablename, condition));
         rest.executeUpdate(Query.queryAddOrder_history(history_tablename, resultdata, completedAt, stage));
-        deleteProduct(value);
+        deleteOrder(value);
 
+    }
+    public void deleteProduct(String orderid) throws SQLException {
+        String product_tablename = Constant.DataBase_UserTableName.DBProductdata;
+        rest.executeUpdate(Query.delete(product_tablename,Constant.DataBase_Gobal_Products.productid,orderid));
     }
 
 //    public JSONArray getProduct(String product_tablename, String order_tablename, String stage, String userid) throws SQLException {

@@ -14,14 +14,13 @@ import java.io.IOException;
 @WebServlet("/vendorcookies")
 public class VendorCookie extends HttpServlet {
     public VendorCookie() {super();}
-    protected VendorService vendorService = new VendorService();
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
 
         JSONArray categorys = new JSONArray();
         try {
-            categorys = vendorService.getAllCategory((String) session.getAttribute(Constant.Usersdata.userid));
+            categorys = new VendorService(session).getAllCategory((String) session.getAttribute(Constant.Usersdata.userid));
         } catch (Throwable e) {
             response.sendError(401, "Unauthorized");
             throw new RuntimeException(e);

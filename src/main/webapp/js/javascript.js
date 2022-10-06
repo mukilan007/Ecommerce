@@ -184,3 +184,7 @@ const inform = document.getElementById("signform");
 inform.addEventListener('submit', function handleSubmit(event) {
     inform.reset();
 });
+
+//  function preventBack(){window.history.forward();}
+  setTimeout(function(){window.history.forward();}, 0);
+  window.onunload=function(){null};

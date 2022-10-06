@@ -16,7 +16,7 @@ function logout(){
 function onCancel(data) {
 	    var payload = {"_id": data.toString()};
         $.ajax({
-                url : "vendor/delete",
+                url : "vendor/order/delete",
                 method: 'GET',
                 type: "json",
                 data: {"payload" : JSON.stringify(payload)},
