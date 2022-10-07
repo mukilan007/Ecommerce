@@ -7,6 +7,7 @@ public class Notification {
     Emailnotification emailnotification;
     SMSnotification smsnotification;
     Map<String, String> map = new HashMap<String, String>();
+    private Notification(){}
     public Notification(Emailnotification emailnotification, SMSnotification smsnotification) {
         this.smsnotification =smsnotification;
         this.emailnotification = emailnotification;

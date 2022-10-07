@@ -7,12 +7,15 @@ import com.util.Accountmanagement;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
+
+import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 
 public class LoginService {
     private RESTOperation rest = null;
@@ -47,6 +50,7 @@ public class LoginService {
         session.setAttribute(Constant.Usersdata.userid, list.get(0));
         session.setAttribute(Constant.Usersdata.name, list.get(1));
         session.setAttribute(Constant.Usersdata.isadmin, list.get(4));
+        LOGGER.info("Logger Name: "+list.get(1));
 
         condition = " " + Constant.Usersdata.email + " = '" + payload.get(Constant.Usersdata.email) + "';";
         String set = Constant.Usersdata.lastcheckin + " = '" + String.valueOf(accountmanagement.getTimeNow());
