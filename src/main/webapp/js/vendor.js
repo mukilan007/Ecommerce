@@ -114,19 +114,19 @@ function getvendordeatil(stage) {
         });
 }
 
-function vendorPage(event, type) {
-    var i;
-    var product = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < product.length; i++) {
-    product[i].style.display = "none";
-    }
-    var tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    document.getElementById(type).style.display = "block";
-    event.currentTarget.className += " active";
-}
+//function vendorPage(event, type) {
+//    var i;
+//    var product = document.getElementsByClassName("tabcontent");
+//    for (i = 0; i < product.length; i++) {
+//    product[i].style.display = "none";
+//    }
+//    var tablinks = document.getElementsByClassName("tablinks");
+//    for (i = 0; i < tablinks.length; i++) {
+//    tablinks[i].className = tablinks[i].className.replace(" active", "");
+//    }
+//    document.getElementById(type).style.display = "block";
+//    event.currentTarget.className += " active";
+//}
 
 function vendorAdd() {
     var categoryname = document.getElementById("categoryname").value;
